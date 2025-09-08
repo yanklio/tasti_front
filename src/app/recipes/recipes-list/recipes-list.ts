@@ -1,13 +1,19 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { Component, inject } from '@angular/core';
+import { RecipesCard } from '../recipes-card/recipes-card';
+import RecipesService from '../recipes.service';
 
 @Component({
   selector: 'app-recipes-list',
-  imports: [MatGridListModule, MatCardModule, MatButtonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './recipes-list.html',
   styleUrl: './recipes-list.css',
+  imports: [RecipesCard],
 })
-export class RecipesList {}
+export class RecipesList {
+  recipesService = inject(RecipesService);
+
+  recipes: Recipe[] = [];
+
+  constructor() {
+    this.recipes = this.recipesService.getRecipes();
+  }
+}
