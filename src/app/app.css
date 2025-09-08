@@ -1,0 +1,21 @@
+/*toolbar*/
+.toolbar-spacer {
+  width: 20px;
+}
+
+.github-icon {
+  margin-left: auto;
+}
+
+.github-icon svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+/* layout */
+.main-wrapper {
+  margin-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
