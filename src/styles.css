@@ -9,3 +9,48 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+/* Hide scrollbars while maintaining scroll functionality */
+/* For webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* For Internet Explorer and Edge legacy */
+body {
+  -ms-overflow-style: none;
+}
+
+/* Utility classes for selective scrollbar hiding */
+.hide-scrollbar {
+  /* Webkit browsers */
+  -webkit-scrollbar-width: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.show-scrollbar {
+  /* Restore default scrollbars */
+  scrollbar-width: auto;
+  -ms-overflow-style: auto;
+}
+
+.show-scrollbar::-webkit-scrollbar {
+  width: auto;
+  background: auto;
+}
