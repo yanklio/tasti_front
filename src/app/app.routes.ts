@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { Recipes } from './recipes/recipes';
-import { Auth } from './auth/auth';
+import { Recipes } from './features/recipes/recipes';
+import { Auth } from './features/auth/auth';
 
 export const routes: Routes = [
     {
