@@ -20,7 +20,7 @@ html {
   --mat-backdrop-blur: 10px;
   --mat-backdrop-opacity: 0.8;
   --mat-backdrop-opacity-enhanced: 0.85;
-  
+
   --mat-surface-backdrop: rgba(255, 255, 255, var(--mat-backdrop-opacity));
   --mat-surface-backdrop-enhanced: rgba(255, 255, 255, var(--mat-backdrop-opacity-enhanced));
 
@@ -34,7 +34,7 @@ body {
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the
   // user's system settings.
-  color-scheme: light dark;
+  color-scheme: light;
 
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these

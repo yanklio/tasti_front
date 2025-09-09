@@ -1,44 +1,49 @@
 .sidebar-wrapper {
-    padding: 16px;
-    height: 100dvh;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: var(--mat-sys-surface);
+  padding: 16px;
+  height: 100dvh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--mat-sys-surface);
 }
 
 .top-wrapper {
-    margin-bottom: 12px;
-    text-align: center;
+  margin-bottom: 12px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .logo {
-    width: 56px;
-    height: 56px;
-    margin-bottom: 8px;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 8px;
 }
 
 .title {
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: var(--mat-sys-on-surface-container);
-    margin: 2px;
-    text-align: center;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface-container);
+  margin: 2px;
+  text-align: center;
 }
 
 .bottom-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
 
-    width: 100%;
+  width: 100%;
 }
 
 .bottom-wrapper svg {
-    width: 24px;
-    height: 24px;
-    color: var(--mat-sys-on-surface-container);
+  width: 24px;
+  height: 24px;
+  color: var(--mat-sys-on-surface-container);
 }
