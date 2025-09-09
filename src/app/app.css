@@ -4,41 +4,23 @@ mat-toolbar {
   top: 0;
   z-index: 1000;
 
-  /* Semi-transparent background as fallback */
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: var(--mat-surface-backdrop);
 
-  /* Backdrop filter with all vendor prefixes */
-  -webkit-backdrop-filter: blur(10px);
-  -moz-backdrop-filter: blur(10px);
-  -ms-backdrop-filter: blur(10px);
-  -o-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(var(--mat-backdrop-blur));
+  -moz-backdrop-filter: blur(var(--mat-backdrop-blur));
+  -ms-backdrop-filter: blur(var(--mat-backdrop-blur));
+  -o-backdrop-filter: blur(var(--mat-backdrop-blur));
+  backdrop-filter: blur(var(--mat-backdrop-blur));
 
-  /* Force hardware acceleration */
   will-change: backdrop-filter;
   transform: translateZ(0);
 
-  /* Improve text visibility and contrast */
   color: var(--mat-sys-on-surface);
   font-weight: 500;
 
-  /* Override background when backdrop-filter is supported */
-  @supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
-    background: rgba(255, 255, 255, 0.85);
+  @supports (backdrop-filter: blur(var(--mat-backdrop-blur))) or (-webkit-backdrop-filter: blur(var(--mat-backdrop-blur))) {
+    background: var(--mat-surface-backdrop-enhanced);
     border-bottom: 1px solid var(--mat-sys-outline-variant);
-  }
-}
-
-/* Dark mode specific backdrop styling */
-@media (prefers-color-scheme: dark) {
-  mat-toolbar {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-
-  @supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
-    mat-toolbar {
-      background: rgba(0, 0, 0, 0.85);
-    }
   }
 }
 

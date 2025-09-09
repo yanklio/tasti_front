@@ -16,6 +16,18 @@ html {
       density: 0,
     )
   );
+
+  --mat-backdrop-blur: 10px;
+  --mat-backdrop-opacity: 0.8;
+  --mat-backdrop-opacity-enhanced: 0.85;
+  
+  --mat-surface-backdrop: rgba(255, 255, 255, var(--mat-backdrop-opacity));
+  --mat-surface-backdrop-enhanced: rgba(255, 255, 255, var(--mat-backdrop-opacity-enhanced));
+
+  @media (prefers-color-scheme: dark) {
+    --mat-surface-backdrop: rgba(0, 0, 0, var(--mat-backdrop-opacity));
+    --mat-surface-backdrop-enhanced: rgba(0, 0, 0, var(--mat-backdrop-opacity-enhanced));
+  }
 }
 
 body {
