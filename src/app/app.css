@@ -1,5 +1,5 @@
-/*toolbar*/
-mat-toolbar {
+/* toolbar*/
+/* mat-toolbar {
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -26,34 +26,6 @@ mat-toolbar {
 
 .toolbar-spacer {
   width: 20px;
-}
+} */
 
 /* Icon and button styling for better visibility */
-mat-toolbar button {
-  color: var(--mat-sys-on-surface);
-}
-
-mat-toolbar mat-icon {
-  color: var(--mat-sys-on-surface);
-  text-shadow: 0 1px 2px var(--mat-sys-surface);
-}
-
-.github-icon {
-  margin-left: auto;
-  color: var(--mat-sys-on-surface);
-}
-
-.github-icon svg {
-  display: block;
-  width: 24px;
-  height: 24px;
-  filter: drop-shadow(0 1px 2px var(--mat-sys-surface));
-}
-
-/* layout */
-.main-wrapper {
-  margin-top: 16px;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-bottom: 16px;
-}
