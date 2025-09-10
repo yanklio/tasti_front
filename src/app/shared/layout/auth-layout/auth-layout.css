@@ -15,11 +15,11 @@
   height: 100%;
   background: linear-gradient(
     135deg,
-    var(--mat-sys-tertiary-container) 0%,
-    var(--mat-sys-surface-container-low) 25%,
+    var(--mat-sys-primary-container) 0%,
+    var(--mat-sys-surface-container-low) 15%,
     var(--mat-sys-surface-container) 50%,
-    var(--mat-sys-primary-container) 85%,
-    var(--mat-sys-tertiary-container) 100%
+    var(--mat-sys-primary-container) 95%,
+    var(--mat-sys-primary-container) 100%
   );
 }
 
