@@ -19,3 +19,5 @@ class Recipe {
     this.imageUrl = imageUrl || '';
   }
 }
+
+export { Recipe };

@@ -21,7 +21,7 @@
       <mat-icon>computer</mat-icon>
       }
     </button>
-    <mat-menu #menu="matMenu" yPosition="above" xPosition="after">
+    <mat-menu #menu="matMenu" yPosition="above" xPosition="before" [overlapTrigger]="false">
       <button mat-menu-item (click)="themeService.turnOnLightTheme()">
         <mat-icon>light_mode</mat-icon>
         <span>Light</span>
