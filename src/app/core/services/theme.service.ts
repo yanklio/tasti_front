@@ -22,36 +22,50 @@ export class ThemeService {
     this.applyTheme();
   }
 
-  private applyTheme() {
+  private async applyTheme() {
+    if (this.isViewTransitionsSupported()) {
+      await document.startViewTransition(() => {
+        this.updateThemeClass();
+      }).finished;
+    } else {
+      this.updateThemeClass();
+    }
+  }
+
+  private updateThemeClass() {
     document.body.classList.remove('light', 'dark', 'system');
     document.body.classList.add(this.theme);
   }
 
-  setTheme(theme: themeOptions) {
+  async setTheme(theme: themeOptions) {
     if (this.theme === theme) return;
 
     this.theme = theme;
     localStorage.setItem(this.THEME_KEY, theme);
-    this.applyTheme();
+    await this.applyTheme();
   }
 
   getTheme() {
     return this.theme;
   }
 
-  turnOnLightTheme() {
-    this.setTheme('light');
+  async turnOnLightTheme() {
+    await this.setTheme('light');
   }
 
-  turnOnDarkTheme() {
-    this.setTheme('dark');
+  async turnOnDarkTheme() {
+    await this.setTheme('dark');
   }
 
-  turnOnSystemTheme() {
-    this.setTheme('system');
+  async turnOnSystemTheme() {
+    await this.setTheme('system');
   }
 
   getCurrentTheme() {
     return this.theme;
+  }
+
+  isViewTransitionsSupported(): boolean {
+    return 'startViewTransition' in document;
   }
 }
