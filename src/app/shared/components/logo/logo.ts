@@ -1,5 +1,6 @@
-import { Component, input, computed, output } from '@angular/core';
+import { Component, input, computed, output, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-logo',
@@ -25,7 +26,16 @@ export class LogoComponent {
 
   logoClicked = output<void>();
 
-  logoSrc = computed(() => '/assets/brand/logo.svg');
+  logoSrc = computed(() => {
+    const theme = this.themeService.theme();
+    const isDarkMode =
+      theme === 'dark' ||
+      (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    return isDarkMode ? '/assets/brand/logo-dark.svg' : '/assets/brand/logo.svg';
+  });
+
+  private themeService = inject(ThemeService);
 
   constructor(private router: Router) {}
 

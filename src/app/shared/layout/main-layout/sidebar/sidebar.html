@@ -13,9 +13,9 @@
       class="bottom-icon"
       [matMenuTriggerFor]="menu"
     >
-      @if(themeService.getTheme() == 'light') {
+      @if(themeService.theme() == 'light') {
       <mat-icon>light_mode</mat-icon>
-      } @else if(themeService.getTheme() == 'dark') {
+      } @else if(themeService.theme() == 'dark') {
       <mat-icon>dark_mode</mat-icon>
       } @else {
       <mat-icon>computer</mat-icon>

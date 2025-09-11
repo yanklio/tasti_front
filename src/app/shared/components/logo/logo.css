@@ -4,36 +4,51 @@
     transform 0.3s ease-in-out,
     filter 0.2s ease;
   user-select: none;
+  object-fit: contain;
 }
 
 .logo:hover {
-  transform: scale(1.05) rotate(-5deg);
-}
-
-.logo[style*='cursor: pointer']:hover {
-  filter: brightness(1.1);
+  transform: scale(1.05) rotate(-30deg);
 }
 
 .logo[style*='cursor: pointer']:active {
   transform: scale(0.98) rotate(-3deg);
 }
 
-body.dark .logo {
-  filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+/* Light theme - subtle shadow */
+body.light .logo {
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.1));
 }
 
-body.light .logo {
-  filter: brightness(0.9) contrast(1.1) drop-shadow(0 0 4px rgba(0, 0, 0, 0.1));
+body.light .logo[style*='cursor: pointer']:hover {
+  filter: brightness(1.05) drop-shadow(0 0 4px rgba(0, 0, 0, 0.15));
+}
+
+/* Dark theme - light glow for better visibility */
+body.dark .logo {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+}
+
+body.dark .logo[style*='cursor: pointer']:hover {
+  filter: brightness(1.1) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
 }
 
 /* System theme support */
 body.system .logo {
-  filter: brightness(0.9) contrast(1.1) drop-shadow(0 0 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.1));
+}
+
+body.system .logo[style*='cursor: pointer']:hover {
+  filter: brightness(1.05) drop-shadow(0 0 4px rgba(0, 0, 0, 0.15));
 }
 
 @media (prefers-color-scheme: dark) {
   body.system .logo {
-    filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+  }
+
+  body.system .logo[style*='cursor: pointer']:hover {
+    filter: brightness(1.1) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
   }
 }
 
@@ -44,8 +59,8 @@ body.system .logo {
   border-radius: 4px;
 }
 
-/* Ensure image renders properly */
+/* Fallback styling */
 .logo {
-  object-fit: contain;
-  vertical-align: middle;
+  max-width: 100%;
+  height: auto;
 }

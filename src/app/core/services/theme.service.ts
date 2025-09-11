@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 type themeOptions = 'light' | 'dark' | 'system';
 
@@ -6,8 +6,11 @@ type themeOptions = 'light' | 'dark' | 'system';
   providedIn: 'root',
 })
 export class ThemeService {
-  private theme: themeOptions = 'system';
+  private _theme = signal<themeOptions>('system');
   private readonly THEME_KEY = 'app-theme';
+
+  // Public readonly signal for components to subscribe to
+  theme = this._theme.asReadonly();
 
   constructor() {
     this.initializeTheme();
@@ -17,7 +20,7 @@ export class ThemeService {
     const savedTheme = localStorage.getItem(this.THEME_KEY) as 'light' | 'dark' | 'system';
 
     if (savedTheme && ['light', 'dark', 'system'].includes(savedTheme)) {
-      this.theme = savedTheme;
+      this._theme.set(savedTheme);
     }
     this.applyTheme();
   }
@@ -34,19 +37,19 @@ export class ThemeService {
 
   private updateThemeClass() {
     document.body.classList.remove('light', 'dark', 'system');
-    document.body.classList.add(this.theme);
+    document.body.classList.add(this._theme());
   }
 
   async setTheme(theme: themeOptions) {
-    if (this.theme === theme) return;
+    if (this._theme() === theme) return;
 
-    this.theme = theme;
+    this._theme.set(theme);
     localStorage.setItem(this.THEME_KEY, theme);
     await this.applyTheme();
   }
 
   getTheme() {
-    return this.theme;
+    return this._theme();
   }
 
   async turnOnLightTheme() {
@@ -59,10 +62,6 @@ export class ThemeService {
 
   async turnOnSystemTheme() {
     await this.setTheme('system');
-  }
-
-  getCurrentTheme() {
-    return this.theme;
   }
 
   isViewTransitionsSupported(): boolean {
