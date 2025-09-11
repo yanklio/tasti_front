@@ -1,0 +1,51 @@
+.logo {
+  display: block;
+  transition:
+    transform 0.3s ease-in-out,
+    filter 0.2s ease;
+  user-select: none;
+}
+
+.logo:hover {
+  transform: scale(1.05) rotate(-5deg);
+}
+
+.logo[style*='cursor: pointer']:hover {
+  filter: brightness(1.1);
+}
+
+.logo[style*='cursor: pointer']:active {
+  transform: scale(0.98) rotate(-3deg);
+}
+
+body.dark .logo {
+  filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+}
+
+body.light .logo {
+  filter: brightness(0.9) contrast(1.1) drop-shadow(0 0 4px rgba(0, 0, 0, 0.1));
+}
+
+/* System theme support */
+body.system .logo {
+  filter: brightness(0.9) contrast(1.1) drop-shadow(0 0 4px rgba(0, 0, 0, 0.1));
+}
+
+@media (prefers-color-scheme: dark) {
+  body.system .logo {
+    filter: brightness(1.2) contrast(1.1) drop-shadow(0 0 8px rgba(255, 255, 255, 0.2));
+  }
+}
+
+/* Focus styling for accessibility */
+.logo:focus {
+  outline: 2px solid var(--mat-sys-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Ensure image renders properly */
+.logo {
+  object-fit: contain;
+  vertical-align: middle;
+}

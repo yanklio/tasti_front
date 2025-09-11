@@ -12,20 +12,11 @@
 }
 
 .logo-wrapper {
+  margin-top: 0.5rem;
   margin-bottom: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.logo {
-  width: 82px;
-  height: 82px;
-  transition: transform 0.3s ease-in-out;
-}
-
-.logo:hover {
-  transform: scale(1.1) rotate(10deg);
 }
 
 .login-card mat-card-title {
@@ -78,7 +69,7 @@
 /* Register link styling */
 .register-link {
   text-align: center;
-  margin-top: 1.5rem;
+  margin-top: 10px;
   font-size: 0.9rem;
   color: var(--mat-sys-on-surface-variant);
 }
