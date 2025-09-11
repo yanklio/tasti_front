@@ -17,6 +17,8 @@
   position: relative;
   z-index: 1;
   backdrop-filter: blur(0.5px);
+
+  background: var(--mat-sys-surface-container-low);
 }
 
 .auth-content {

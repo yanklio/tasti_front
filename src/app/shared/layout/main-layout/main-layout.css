@@ -1,16 +1,18 @@
 .main-layout {
-    height: 100vh;
+  height: 100vh;
 }
 
 mat-drawer {
-    width: 100px;
-    border-right: 1px solid var(--mat-sys-outline-variant);
-    border-radius: 0;
+  width: 100px;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0;
+}
+
+mat-drawer-content {
+  background: var(--mat-sys-surface-container-low);
 }
 
 .main-wrapper {
-  margin-top: 16px;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 24px;
   padding-bottom: 128px;
 }
