@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LogoComponent } from '../../../shared/components/logo/logo';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,8 @@ export class Login {
   loginForm: FormGroup;
   hidePassword = true;
 
+  authService = inject(AuthService);
+
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -39,6 +42,7 @@ export class Login {
       const { username, password } = this.loginForm.value;
       console.log('Login attempt:', { username, password });
       // TODO: Implement actual login logic
+      this.authService.login();
     } else {
       console.log('Form is invalid');
     }
