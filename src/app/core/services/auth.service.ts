@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,6 @@ import { inject, Injectable, signal } from '@angular/core';
 export class AuthService {
   constructor() {}
 
-  // TODO: Implement login and logout methods
   isLogged = signal(false);
   http = inject(HttpClient);
 
@@ -16,10 +16,8 @@ export class AuthService {
   }
 
   async login() {
-    this.isLogged.set(true);
-
     this.http
-      .post<AuthResponse>('http://localhost:8000/api/v1/auth/login/', {
+      .post<AuthResponse>(environment.apiUrl + 'auth/login/', {
         username: 'testuser123',
         password: 'mypassword123',
       })
