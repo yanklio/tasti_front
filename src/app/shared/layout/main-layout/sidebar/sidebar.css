@@ -35,6 +35,11 @@
   width: 100%;
 }
 
+.auth-button mat-icon,
+.theme-button mat-icon {
+  transform: scale(1.15);
+}
+
 .bottom-wrapper svg {
   width: 24px;
   height: 24px;

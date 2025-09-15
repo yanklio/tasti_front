@@ -7,18 +7,28 @@
   <div class="bottom-wrapper">
     <button
       matIconButton
+      [matTooltip]="getAuthButtonTooltip()"
+      matTooltipPosition="after"
+      class="auth-button"
+      (click)="onAuthButtonClick()"
+    >
+      <mat-icon class="auth-icon">{{ getAuthButtonIcon() }}</mat-icon>
+    </button>
+
+    <button
+      matIconButton
       matTooltip="Toggle theme"
       matTooltipPosition="after"
       aria-label="Toggle theme"
-      class="bottom-icon"
+      class="theme-button"
       [matMenuTriggerFor]="menu"
     >
       @if(themeService.theme() == 'light') {
-      <mat-icon>light_mode</mat-icon>
+      <mat-icon class="theme-icon">light_mode</mat-icon>
       } @else if(themeService.theme() == 'dark') {
-      <mat-icon>dark_mode</mat-icon>
+      <mat-icon class="theme-icon">dark_mode</mat-icon>
       } @else {
-      <mat-icon>computer</mat-icon>
+      <mat-icon class="theme-icon">computer</mat-icon>
       }
     </button>
     <mat-menu #menu="matMenu" yPosition="above" xPosition="before" [overlapTrigger]="false">
