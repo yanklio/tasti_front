@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LogoComponent } from '../../../shared/components/logo/logo';
 import { AuthService } from '../../../core/services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoginRequest } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-login',
@@ -25,10 +27,13 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './login.css',
 })
 export class Login {
+  private router = inject(Router);
+  private _snackBar = inject(MatSnackBar);
+
+  private authService = inject(AuthService);
+
   loginForm: FormGroup;
   hidePassword = true;
-
-  authService = inject(AuthService);
 
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
@@ -40,11 +45,24 @@ export class Login {
   onSubmit() {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
-      console.log('Login attempt:', { username, password });
-      // TODO: Implement actual login logic
-      this.authService.login();
+      this.authService.login(new LoginRequest(username, password)).subscribe({
+        next: (response) => {
+          this._snackBar.open('Login successful', 'Dismiss', {
+            duration: 5000,
+          });
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          // TODO: Normal error handling
+          this._snackBar.open('Register failed', 'Dismiss', {
+            duration: 5000,
+          });
+        },
+      });
     } else {
-      console.log('Form is invalid');
+      this._snackBar.open('Form is invalid', 'Dismiss', {
+        duration: 5000,
+      });
     }
   }
 

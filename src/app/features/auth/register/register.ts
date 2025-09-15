@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LogoComponent } from '../../../shared/components/logo/logo';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../../core/services/auth.service';
+import { RegisterRequest } from '../../../core/models/auth.model';
 
 @Component({
   selector: 'app-register',
@@ -24,6 +27,11 @@ import { LogoComponent } from '../../../shared/components/logo/logo';
   styleUrl: './register.css',
 })
 export class Register {
+  private router = inject(Router);
+  private _snackBar = inject(MatSnackBar);
+
+  private authService = inject(AuthService);
+
   registerForm: FormGroup;
   hidePassword = true;
 
@@ -37,10 +45,23 @@ export class Register {
   onSubmit() {
     if (this.registerForm.valid) {
       const { username, password } = this.registerForm.value;
-      console.log('Register attempt:', { username, password });
-      // TODO: Implement actual registration logic
+
+      this.authService.register(new RegisterRequest(username, password)).subscribe({
+        next: () => {
+          this._snackBar.open('Registration successful!', 'Dismiss', { duration: 5000 });
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          // TODO: Normal error handling
+          this._snackBar.open('Register failed', 'Dismiss', {
+            duration: 5000,
+          });
+        },
+      });
     } else {
-      console.log('Form is invalid');
+      this._snackBar.open('Form is invalid', 'Dismiss', {
+        duration: 5000,
+      });
     }
   }
 
