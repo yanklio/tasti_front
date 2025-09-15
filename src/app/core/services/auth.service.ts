@@ -9,11 +9,13 @@ import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.mode
   providedIn: 'root',
 })
 export class AuthService {
-  http = inject(HttpClient);
+  private http = inject(HttpClient);
 
-  userService = inject(UserService);
+  private userService = inject(UserService);
 
-  authUrl = environment.apiUrl + 'auth/';
+  private readonly authUrl = environment.apiUrl + 'auth/';
+  private readonly ACCESS_TOKEN = 'access_token';
+
   isLogged = signal(false);
 
   isLoggedIn(): boolean {
@@ -24,7 +26,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(this.authUrl + 'login/', credentials).pipe(
       tap((response) => {
         this.isLogged.set(true);
-        localStorage.setItem('access_token', response.access);
+        localStorage.setItem(this.ACCESS_TOKEN, response.access);
         this.userService.setUser(response.user);
       }),
     );
@@ -34,7 +36,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(this.authUrl + 'register/', credentials).pipe(
       tap((response) => {
         this.isLogged.set(true);
-        localStorage.setItem('access_token', response.access);
+        localStorage.setItem(this.ACCESS_TOKEN, response.access);
         this.userService.setUser(response.user);
       }),
     );
@@ -44,7 +46,7 @@ export class AuthService {
     return this.http.post(this.authUrl + 'logout/', {}).pipe(
       tap(() => {
         this.isLogged.set(false);
-        localStorage.removeItem('access_token');
+        localStorage.removeItem(this.ACCESS_TOKEN);
         this.userService.setUser(null);
       }),
     );
