@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule, MatButtonToggleChange } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
@@ -11,7 +12,14 @@ import { LogoComponent } from '../../../components/logo/logo';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [MatIconModule, MatButtonModule, MatTooltipModule, MatMenuModule, LogoComponent],
+  imports: [
+    MatIconModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatTooltipModule,
+    MatMenuModule,
+    LogoComponent,
+  ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,5 +46,21 @@ export class Sidebar {
 
   getAuthButtonTooltip(): string {
     return this.userService.isLoggedIn() ? 'Account' : 'Login';
+  }
+
+  onThemeChange(event: MatButtonToggleChange): void {
+    const theme = event.value;
+
+    switch (theme) {
+      case 'light':
+        this.themeService.turnOnLightTheme();
+        break;
+      case 'dark':
+        this.themeService.turnOnDarkTheme();
+        break;
+      case 'system':
+        this.themeService.turnOnSystemTheme();
+        break;
+    }
   }
 }

@@ -17,28 +17,13 @@
   gap: 8px;
 }
 
-.title {
-  font-size: 1.3rem;
-  font-weight: 500;
-  color: var(--mat-sys-on-surface-container);
-  margin: 2px;
-  text-align: center;
-}
-
 .bottom-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 4px;
-
   width: 100%;
-}
-
-.bottom-wrapper svg {
-  width: 24px;
-  height: 24px;
-  color: var(--mat-sys-on-surface-container);
 }
 
 .bottom-icon {
@@ -77,6 +62,7 @@
   transform: scale(1.15);
 }
 
+/* Authentication states */
 .auth-button.authenticated {
   background-color: var(--mat-sys-primary-container);
   color: var(--mat-sys-on-primary-container);
@@ -85,33 +71,53 @@
 .auth-button.unauthenticated {
   background-color: var(--mat-sys-surface-variant);
   color: var(--mat-sys-on-surface-variant);
-  border: 2px solid var(--mat-sys-outline-variant);
 }
 
 .auth-button.unauthenticated:hover {
   background-color: var(--mat-sys-primary-container);
   color: var(--mat-sys-on-primary-container);
-  border-color: var(--mat-sys-primary);
 }
 
-.submenu-arrow {
-  margin-left: auto;
-  opacity: 0.6;
+.theme-toggle-container {
+  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
 }
 
-/* GitHub menu item styling */
+.theme-toggle-group .mat-button-toggle {
+  min-width: 44px;
+  height: 40px;
+}
+
+.theme-toggle-group .mat-button-toggle .mat-button-toggle-label-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* GitHub menu item */
 .github-menu-item {
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.github-menu-item:hover {
+  background-color: transparent;
 }
 
 .github-svg-icon {
-  margin-right: 12px;
+  margin-right: 8px;
   vertical-align: middle;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* General menu item icon alignment */
+/* General menu item styling */
 ::ng-deep .mat-mdc-menu-item {
   display: flex;
   align-items: center;
@@ -121,4 +127,20 @@
   margin-right: 12px;
   display: flex;
   align-items: center;
+}
+
+/* GitHub menu item specific overrides */
+::ng-deep .github-menu-item .mat-mdc-menu-item-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+::ng-deep .github-menu-item:hover .mat-mdc-menu-item-text {
+  background: none;
+}
+
+::ng-deep .github-menu-item:hover {
+  background-color: transparent;
 }

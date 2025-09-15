@@ -19,18 +19,24 @@
 
     <!-- More Options Menu -->
     <mat-menu #moreMenu="matMenu" yPosition="above" xPosition="before" [overlapTrigger]="false">
-      <!-- Theme Switcher Submenu -->
-      <button mat-menu-item [matMenuTriggerFor]="themeMenu">
-        @if(themeService.theme() == 'light') {
-        <mat-icon>light_mode</mat-icon>
-        } @else if(themeService.theme() == 'dark') {
-        <mat-icon>dark_mode</mat-icon>
-        } @else {
-        <mat-icon>computer</mat-icon>
-        }
-        <span>Theme</span>
-        <mat-icon class="submenu-arrow">chevron_right</mat-icon>
-      </button>
+      <!-- Theme Toggle Group -->
+      <div class="theme-toggle-container" (click)="$event.stopPropagation()">
+        <mat-button-toggle-group
+          [value]="themeService.theme()"
+          (change)="onThemeChange($event)"
+          class="theme-toggle-group"
+        >
+          <mat-button-toggle value="light">
+            <mat-icon>light_mode</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle value="dark">
+            <mat-icon>dark_mode</mat-icon>
+          </mat-button-toggle>
+          <mat-button-toggle value="system">
+            <mat-icon>computer</mat-icon>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
 
       <!-- GitHub Link -->
       <a
@@ -46,22 +52,6 @@
         </svg>
         <span>GitHub Repository</span>
       </a>
-    </mat-menu>
-
-    <!-- Theme Submenu -->
-    <mat-menu #themeMenu="matMenu" yPosition="above" xPosition="before" [overlapTrigger]="false">
-      <button mat-menu-item (click)="themeService.turnOnLightTheme()">
-        <mat-icon>light_mode</mat-icon>
-        <span>Light</span>
-      </button>
-      <button mat-menu-item (click)="themeService.turnOnDarkTheme()">
-        <mat-icon>dark_mode</mat-icon>
-        <span>Dark</span>
-      </button>
-      <button mat-menu-item (click)="themeService.turnOnSystemTheme()">
-        <mat-icon>computer</mat-icon>
-        <span>System</span>
-      </button>
     </mat-menu>
 
     <!-- Authentication Status Button -->
