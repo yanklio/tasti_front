@@ -54,7 +54,7 @@ export class Login {
         },
         error: (error) => {
           // TODO: Normal error handling
-          this._snackBar.open('Register failed', 'Dismiss', {
+          this._snackBar.open('Login failed', 'Dismiss', {
             duration: 5000,
           });
         },
