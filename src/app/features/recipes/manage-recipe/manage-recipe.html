@@ -1,0 +1,40 @@
+<app-main-layout>
+  <div class="manage-recipe-container">
+  <div class="manage-recipe-header">
+    <button mat-icon-button class="back-button" (click)="onCancel()" aria-label="Go back">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <p>{{ headerText }}</p>
+  </div>
+
+
+  <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="manage-recipe-form">
+    <app-image-upload
+      [imageSrc]="imageSrc"
+      (imageSrcChange)="onImageSrcChange($event)">
+    </app-image-upload>
+
+    <mat-expansion-panel expanded="true" class="recipe-info-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>Recipe Basic Information</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" required></textarea>
+      </mat-form-field>
+
+    </mat-expansion-panel>
+
+    <button matFab extended color="primary" type="submit" [disabled]="!recipeForm.valid" class="manage-recipe-button">
+        <mat-icon>{{ buttonIcon }}</mat-icon>
+        {{ buttonText }}
+    </button>
+  </form>
+  </div>
+</app-main-layout>

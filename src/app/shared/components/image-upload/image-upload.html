@@ -1,0 +1,22 @@
+<mat-expansion-panel [expanded]="expanded" class="image-upload-panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title>Recipe Photo</mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="image-drop-zone" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
+    @if (imageSrc) {
+      <img [src]="imageSrc" alt="Recipe image" class="uploaded-image">
+    } @else {
+      <div class="placeholder" (click)="triggerFileInput()">
+        <mat-icon>cloud_upload</mat-icon>
+        <p>Drag and drop an image here or click to browse</p>
+      </div>
+    }
+  </div>
+  <input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" style="display: none;">
+  <div class="image-actions">
+    <button mat-flat-button color="warn" (click)="removeImage()" [disabled]="!imageSrc">
+      <mat-icon>delete</mat-icon>
+      Remove
+    </button>
+  </div>
+</mat-expansion-panel>

@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { Recipes } from './features/recipes/recipes';
-import { CreateRecipe } from './features/recipes/create-recipe/create-recipe';
-import { EditRecipe } from './features/recipes/edit-recipe/edit-recipe';
+import { ManageRecipe } from './features/recipes/manage-recipe/manage-recipe';
 
 export const routes: Routes = [
   {
@@ -11,13 +10,15 @@ export const routes: Routes = [
   },
   {
     path: 'create-recipe',
-    component: CreateRecipe,
+    component: ManageRecipe,
     title: 'Create Recipe',
+    data: { mode: 'create' }
   },
   {
     path: 'edit-recipe/:id',
-    component: EditRecipe,
+    component: ManageRecipe,
     title: 'Edit Recipe',
+    data: { mode: 'edit' }
   },
   {
     path: 'auth',
