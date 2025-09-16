@@ -1,0 +1,101 @@
+.back-button {
+  background-color: var(--mat-sys-surface-variant);
+  border-radius: 50%;
+}
+
+.create-recipe-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  font-size: 18px;
+  font-weight: 500;
+
+  position: sticky;
+  top: 0;
+  background-color: var(--mat-sys-surface-container-low);
+  z-index: 100;
+  min-height: 60px;
+}
+
+.create-recipe-form {
+  padding: 16px 4px 80px 4px; /* Increased bottom padding to account for fixed button */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+.image-upload-panel {
+  margin-top: 16px;
+}
+
+.recipe-info-panel {
+  margin-top: 16px;
+}
+
+
+.recipe-info-panel .mat-mdc-form-field {
+  display: block;
+  margin-bottom: 16px;
+}
+
+
+.image-drop-zone {
+  height: 300px;
+
+  border: 2px dashed var(--mat-sys-outline-variant);
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-drop-zone:hover {
+  border-color: var(--mat-sys-outline);
+}
+
+.uploaded-image {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.placeholder mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: var(--mat-sys-outline-variant);
+}
+
+.placeholder p {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.image-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.create-recipe-button {
+  position: fixed;
+  bottom: 16px;
+  right: 24px;
+  z-index: 1000;
+}

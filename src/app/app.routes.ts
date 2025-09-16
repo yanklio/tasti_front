@@ -8,6 +8,11 @@ export const routes: Routes = [
     title: 'Recipes',
   },
   {
+    path: 'create-recipe',
+    component: CreateRecipe,
+    title: 'Create Recipe',
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./features/auth/auth.routes').then((m) => m.authRoutes),
     title: 'Authentication',
