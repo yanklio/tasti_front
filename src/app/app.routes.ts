@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { Recipes } from './features/recipes/recipes';
+import { CreateRecipe } from './features/recipes/create-recipe/create-recipe';
 
 export const routes: Routes = [
   {
