@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Recipe } from './recipe.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export default class RecipesService {
   private recipes: Recipe[] = [
     {
@@ -37,6 +39,22 @@ export default class RecipesService {
         'https://thestayathomechef.com/wp-content/uploads/2024/03/Most-Amazing-Lasagna_Square-2-1200x752.jpg',
       ingredients: [],
     },
+    {
+      id: 5,
+      title: 'Tacos',
+      description: 'A traditional Mexican dish consisting of a folded or rolled tortilla filled with various mixtures.',
+      imageUrl:
+        'https://danosseasoning.com/wp-content/uploads/2022/03/Beef-Tacos-1024x767.jpg',
+      ingredients: [],
+    },
+    {
+      id: 6,
+      title: 'Burrito',
+      description: 'A Mexican dish consisting of a flour tortilla wrapped around a filling, typically of beans or ground or shredded beef.',
+      imageUrl: 
+        'https://www.marthastewart.com/thmb/uSaztTRX13520w0w-inW35pDZ0s=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/MS-312932-bean-burritos-hero-7421-0096cb35178e4650b4b65012e0e7b699.jpg',
+      ingredients: [],
+    },
   ];
 
   constructor() {}
@@ -45,8 +63,19 @@ export default class RecipesService {
     return this.recipes;
   }
 
+  getRecipe(id: number) {
+    return this.recipes.find(recipe => recipe.id === id);
+  }
+
+  updateRecipe(updatedRecipe: Recipe) {
+    const index = this.recipes.findIndex(recipe => recipe.id === updatedRecipe.id);
+    if (index !== -1) {
+      this.recipes[index] = updatedRecipe;
+    }
+  }
+
   addRecipe(recipe: Recipe) {
-    recipe.id = Date.now(); // Simple id generation
+    recipe.id = Date.now();
     this.recipes.push(recipe);
   }
 }
