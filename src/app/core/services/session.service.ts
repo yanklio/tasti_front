@@ -51,8 +51,8 @@ export class SessionService {
     );
   }
 
-  logout() {
-    this.authService.logout().pipe(
+  logout(): Observable<void> {
+    return this.authService.logout().pipe(
       tap(() => {
         this.userService.clearCurrentUser();
       }),
