@@ -27,6 +27,7 @@ export class AuthService {
       tap((response) => {
         this.isLogged.set(true);
         localStorage.setItem(this.ACCESS_TOKEN, response.access);
+        console.log(response);
         this.userService.setUser(response.user);
       }),
     );
