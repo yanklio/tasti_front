@@ -1,13 +1,32 @@
-import { HttpErrorResponse, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest,
+} from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  filter,
+  finalize,
+  Observable,
+  switchMap,
+  take,
+  throwError,
+} from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
+import { AuthResponse } from '../models/auth.model';
 
-// let isRefreshing = false;
-// let refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+let isRefreshing = false;
+let refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
-export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
+export const AuthInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn,
+): Observable<HttpEvent<unknown>> => {
   const router = inject(Router);
   const authService = inject(AuthService);
 
@@ -22,6 +41,9 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      if (error.status === 401 && !isRefreshRequest(req)) {
+        return handle401Error(req, next, authService, router);
+      }
       return throwError(() => error);
     }),
   );
@@ -38,5 +60,39 @@ function isAuthRequest(request: HttpRequest<any>): boolean {
 }
 
 function isRefreshRequest(request: HttpRequest<any>): boolean {
-  return request.url.endsWith('/auth/token/refresh');
+  return request.url.endsWith('/auth/refresh');
+}
+
+function handle401Error(
+  request: HttpRequest<unknown>,
+  next: HttpHandlerFn,
+  authService: AuthService,
+  router: Router,
+): Observable<HttpEvent<unknown>> {
+  if (!isRefreshing) {
+    isRefreshing = true;
+    refreshTokenSubject.next(null);
+
+    return authService.refreshAccessToken().pipe(
+      switchMap((response: AuthResponse) => {
+        refreshTokenSubject.next(response.access);
+        return next(addTokenToRequest(request, response.access));
+      }),
+      catchError((error) => {
+        router.navigate(['/login']);
+        return throwError(() => error);
+      }),
+      finalize(() => {
+        isRefreshing = false;
+      }),
+    );
+  } else {
+    return refreshTokenSubject.pipe(
+      filter((token) => token !== null),
+      take(1),
+      switchMap((token) => {
+        return next(addTokenToRequest(request, token!));
+      }),
+    );
+  }
 }
