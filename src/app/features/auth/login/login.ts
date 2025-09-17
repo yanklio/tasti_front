@@ -7,9 +7,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LogoComponent } from '../../../shared/components/logo/logo';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService as sessionService } from '../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginRequest } from '../../../core/models/auth.model';
+import { SessionService } from '../../../core/services/session.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,7 @@ export class Login {
   private router = inject(Router);
   private _snackBar = inject(MatSnackBar);
 
-  private authService = inject(AuthService);
+  private sessionService = inject(SessionService);
 
   loginForm: FormGroup;
   hidePassword = true;
@@ -45,7 +46,7 @@ export class Login {
   onSubmit() {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
-      this.authService.login(new LoginRequest(username, password)).subscribe({
+      this.sessionService.login(new LoginRequest(username, password)).subscribe({
         next: (response) => {
           this._snackBar.open('Login successful', 'Dismiss', {
             duration: 5000,

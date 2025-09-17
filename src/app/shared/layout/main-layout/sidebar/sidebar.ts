@@ -6,9 +6,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../../../core/services/theme.service';
-import { UserService } from '../../../../core/services/user.service';
-import { AuthService } from '../../../../core/services/auth.service';
 import { LogoComponent } from '../../../components/logo/logo';
+import { SessionService } from '../../../../core/services/session.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -28,11 +27,10 @@ export class Sidebar {
   router = inject(Router);
 
   themeService = inject(ThemeService);
-  userService = inject(UserService);
-  authService = inject(AuthService);
+  sessionService = inject(SessionService);
 
   onAuthButtonClick() {
-    if (this.userService.isLoggedIn()) {
+    if (this.sessionService.isAuthenticated()) {
       // TODO: Implement account page navigation
       // this.router.navigate(['/account']);
     } else {
@@ -41,11 +39,11 @@ export class Sidebar {
   }
 
   getAuthButtonIcon(): string {
-    return this.userService.isLoggedIn() ? 'account_circle' : 'login';
+    return this.sessionService.isAuthenticated() ? 'account_circle' : 'login';
   }
 
   getAuthButtonTooltip(): string {
-    return this.userService.isLoggedIn() ? 'Account' : 'Login';
+    return this.sessionService.isAuthenticated() ? 'Account' : 'Login';
   }
 
   onThemeChange(event: MatButtonToggleChange): void {

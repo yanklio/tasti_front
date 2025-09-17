@@ -60,8 +60,8 @@
       [matTooltip]="getAuthButtonTooltip()"
       matTooltipPosition="after"
       class="auth-button"
-      [class.authenticated]="userService.isLoggedIn()"
-      [class.unauthenticated]="!userService.isLoggedIn()"
+      [class.authenticated]="sessionService.isAuthenticated()"
+      [class.unauthenticated]="!sessionService.isAuthenticated()"
       (click)="onAuthButtonClick()"
     >
       <mat-icon>{{ getAuthButtonIcon() }}</mat-icon>

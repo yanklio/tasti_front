@@ -4,6 +4,7 @@ import { MainLayout } from '../../shared/layout/main-layout/main-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-recipes',
@@ -12,7 +13,7 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './recipes.css',
 })
 export class Recipes {
-  constructor(private router: Router) {}
+  router = inject(Router);
 
   onCreateRecipe() {
     this.router.navigate(['/create-recipe']);

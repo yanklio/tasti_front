@@ -10,6 +10,7 @@ import { LogoComponent } from '../../../shared/components/logo/logo';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest } from '../../../core/models/auth.model';
+import { SessionService } from '../../../core/services/session.service';
 
 @Component({
   selector: 'app-register',
@@ -30,7 +31,7 @@ export class Register {
   private router = inject(Router);
   private _snackBar = inject(MatSnackBar);
 
-  private authService = inject(AuthService);
+  private sessionService = inject(SessionService);
 
   registerForm: FormGroup;
   hidePassword = true;
@@ -46,7 +47,7 @@ export class Register {
     if (this.registerForm.valid) {
       const { username, password } = this.registerForm.value;
 
-      this.authService.register(new RegisterRequest(username, password)).subscribe({
+      this.sessionService.register(new RegisterRequest(username, password)).subscribe({
         next: () => {
           this._snackBar.open('Registration successful!', 'Dismiss', { duration: 5000 });
           this.router.navigate(['/']);

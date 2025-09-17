@@ -2,10 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './core/services/theme.service';
-import { AuthService } from './core/services/auth.service';
-import { UserService } from './core/services/user.service';
 import { FaviconService } from './core/services/favicon.service';
-
+import { SessionService } from './core/services/session.service';
 
 @Component({
   selector: 'app-root',
@@ -19,10 +17,12 @@ export class App {
   theme = inject(ThemeService);
   favicon = inject(FaviconService);
 
-  auth = inject(AuthService);
-  user = inject(UserService);
+  session = inject(SessionService);
 
   constructor() {
-    this.favicon.setFaviconByTheme('assets/favicons/favicon-light.ico', 'assets/favicons/favicon-dark.ico');
+    this.favicon.setFaviconByTheme(
+      'assets/favicons/favicon-light.ico',
+      'assets/favicons/favicon-dark.ico',
+    );
   }
 }
