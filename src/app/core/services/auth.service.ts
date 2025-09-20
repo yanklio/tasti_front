@@ -54,7 +54,7 @@ export class AuthService {
   refreshAccessToken(): Observable<AuthResponse> {
     this.refreshInProgress.next(true);
 
-    return this.http.post<AuthResponse>(this.authUrl + 'refresh/', {}).pipe(
+    return this.http.post<AuthResponse>(this.authUrl + 'token/refresh/', {}).pipe(
       tap((response) => {
         this.setAccessToken(response.access);
       }),

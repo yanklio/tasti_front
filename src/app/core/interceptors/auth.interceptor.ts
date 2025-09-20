@@ -60,7 +60,7 @@ function isAuthRequest(request: HttpRequest<any>): boolean {
 }
 
 function isRefreshRequest(request: HttpRequest<any>): boolean {
-  return request.url.endsWith('/auth/refresh');
+  return request.url.endsWith('/auth/token/refresh');
 }
 
 function handle401Error(
@@ -79,7 +79,7 @@ function handle401Error(
         return next(addTokenToRequest(request, response.access));
       }),
       catchError((error) => {
-        router.navigate(['/login']);
+        // router.navigate(['/login']);
         return throwError(() => error);
       }),
       finalize(() => {
