@@ -19,6 +19,7 @@ import {
 import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 import { AuthResponse } from '../models/auth.model';
+import { SessionService } from '../services/session.service';
 
 let isRefreshing = false;
 let refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
@@ -28,6 +29,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
   const router = inject(Router);
+  const sessionService = inject(SessionService);
   const authService = inject(AuthService);
 
   if (isAuthRequest(req)) {
@@ -42,7 +44,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401 && !isRefreshRequest(req)) {
-        return handle401Error(req, next, authService, router);
+        return handle401Error(req, next, sessionService, router);
       }
       return throwError(() => error);
     }),
@@ -66,14 +68,14 @@ function isRefreshRequest(request: HttpRequest<any>): boolean {
 function handle401Error(
   request: HttpRequest<unknown>,
   next: HttpHandlerFn,
-  authService: AuthService,
+  sessionService: SessionService,
   router: Router,
 ): Observable<HttpEvent<unknown>> {
   if (!isRefreshing) {
     isRefreshing = true;
     refreshTokenSubject.next(null);
 
-    return authService.refreshAccessToken().pipe(
+    return sessionService.refreshToken().pipe(
       switchMap((response: AuthResponse) => {
         refreshTokenSubject.next(response.access);
         return next(addTokenToRequest(request, response.access));

@@ -60,6 +60,7 @@ export class SessionService {
   }
 
   refreshToken(): Observable<AuthResponse> {
+    // TODO: Don't update only via auth routes
     return this.authService.refreshAccessToken().pipe(
       tap((response) => {
         if (response.user) {
