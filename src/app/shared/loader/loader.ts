@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { LogoComponent } from '../logo/logo';
+import { LogoComponent } from '../components/logo/logo';
 
 @Component({
   selector: 'app-loader',
