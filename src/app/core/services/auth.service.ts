@@ -3,6 +3,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, catchError, finalize, Observable, tap, throwError } from 'rxjs';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
+import { AUTH_API_ENDPOINTS } from '../constants';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.mode
 export class AuthService {
   private http = inject(HttpClient);
 
-  private readonly authUrl = environment.apiUrl + 'auth/';
+  private readonly authUrl = environment.apiUrl + AUTH_API_ENDPOINTS.BASE;
 
   private _accessToken = signal<string | null>(null);
   readonly isAuthenticated = computed(() => this._accessToken() !== null);
@@ -36,7 +37,7 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.authUrl + 'login/', credentials).pipe(
+    return this.http.post<AuthResponse>(this.authUrl + AUTH_API_ENDPOINTS.LOGIN, credentials).pipe(
       tap((response) => {
         this.setAccessToken(response.access);
       }),
@@ -44,7 +45,7 @@ export class AuthService {
   }
 
   register(credentials: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.authUrl + 'register/', credentials).pipe(
+    return this.http.post<AuthResponse>(this.authUrl + AUTH_API_ENDPOINTS.REGISTER, credentials).pipe(
       tap((response) => {
         this.setAccessToken(response.access);
       }),
@@ -54,7 +55,7 @@ export class AuthService {
   refreshAccessToken(): Observable<AuthResponse> {
     this.refreshInProgress.next(true);
 
-    return this.http.post<AuthResponse>(this.authUrl + 'token/refresh/', {}).pipe(
+    return this.http.post<AuthResponse>(this.authUrl + AUTH_API_ENDPOINTS.REFRESH, {}).pipe(
       tap((response) => {
         this.setAccessToken(response.access);
       }),
@@ -69,7 +70,7 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
-    return this.http.post(this.authUrl + 'logout/', {}).pipe(
+    return this.http.post(this.authUrl + AUTH_API_ENDPOINTS.LOGOUT, {}).pipe(
       tap(() => {
         this.clearAccessToken();
       }),
