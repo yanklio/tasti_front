@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RecipesCard } from '../recipes-card/recipes-card';
 import RecipesService from '../recipes.service';
 import { Recipe } from '../recipe.model';
+import { ResourceState } from '../../../core/interfaces/resource-state';
 
 @Component({
   selector: 'app-recipes-list',
@@ -12,7 +13,7 @@ import { Recipe } from '../recipe.model';
 export class RecipesList {
   recipesService = inject(RecipesService);
 
-  recipes: Recipe[] = [];
+  recipes: ResourceState<Recipe[]>;
 
   constructor() {
     this.recipes = this.recipesService.getRecipes();

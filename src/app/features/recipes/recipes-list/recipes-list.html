@@ -1,5 +1,6 @@
+<!-- TODO: handle error and loading states -->
 <div class="recipes-grid">
-  @for (recipe of recipes; track recipe.id){
+  @for (recipe of recipes.data || []; track recipe.id){
   <app-recipes-card [recipe]="recipe"></app-recipes-card>
   }
 </div>
