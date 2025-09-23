@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ThemeService } from '../../../../core/services/theme.service';
 import { LogoComponent } from '../../../components/logo/logo';
 import { SessionService } from '../../../../core/services/session.service';
+import { AUTH_API_ENDPOINTS } from '../../../../core/constants';
 
 @Component({
   selector: 'app-sidebar',
@@ -34,7 +35,7 @@ export class Sidebar {
       // TODO: Implement account page navigation
       // this.router.navigate(['/account']);
     } else {
-      this.router.navigate(['/auth/login']);
+      this.router.navigate([AUTH_API_ENDPOINTS.BASE + AUTH_API_ENDPOINTS.LOGIN]);
     }
   }
 

@@ -3,9 +3,7 @@ import { Recipe } from './recipe.model';
 import { ResourceState } from '../../core/interfaces/resource-state';
 
 // TODO: Send a HTTP requests to get recipes
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export default class RecipesService {
   private recipesState: ResourceState<Recipe[]> = {
     data: [

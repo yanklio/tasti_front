@@ -10,9 +10,11 @@ mat-drawer {
 
 mat-drawer-content {
   background: var(--mat-sys-surface-container-low);
+  height: 100%;
 }
 
 .main-wrapper {
+  height: 100%;
   padding: 24px;
-  padding-bottom: 96px;
+  box-sizing: border-box;
 }

@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest } from '../../../core/models/auth.model';
 import { SessionService } from '../../../core/services/session.service';
+import { AUTH_API_ENDPOINTS } from '../../../core/constants';
 
 @Component({
   selector: 'app-register',
@@ -32,6 +33,8 @@ export class Register {
   private _snackBar = inject(MatSnackBar);
 
   private sessionService = inject(SessionService);
+
+  loginLink = "/" + AUTH_API_ENDPOINTS.BASE + AUTH_API_ENDPOINTS.LOGIN;
 
   registerForm: FormGroup;
   hidePassword = true;

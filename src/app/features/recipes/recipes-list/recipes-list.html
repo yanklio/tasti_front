@@ -1,6 +1,17 @@
 <!-- TODO: handle error and loading states -->
-<div class="recipes-grid">
-  @for (recipe of recipes.data || []; track recipe.id){
-  <app-recipes-card [recipe]="recipe"></app-recipes-card>
+
+@if(loading) {
+  <app-loader></app-loader>
+} @else {
+  <div class="recipes-grid">
+  @for (recipe of recipes || []; track recipe.id){
+    <app-recipes-card [recipe]="recipe"></app-recipes-card>
   }
-</div>
+  </div>
+}
+
+
+<button matFab extended class="create-recipe" aria-label="Add recipe" (click)="onCreateRecipe()">
+    <mat-icon>add</mat-icon>
+    New Recipe
+</button>
