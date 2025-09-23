@@ -39,7 +39,9 @@ export class ManageRecipe implements OnInit {
 
     if (this.mode === 'edit') {
       this.recipeId = +this.route.snapshot.params['id'];
-      this.recipe = this.recipesService.getRecipe(this.recipeId);
+      // TODO: Handle loading and error states
+      this.recipe = this.recipesService.getRecipe(this.recipeId).data!;
+
 
       if (!this.recipe) {
         this.snackBar.open('Recipe not found', 'Close', { duration: 3000 });
