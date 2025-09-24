@@ -1,23 +1,30 @@
-class Recipe {
+class RecipeBrief {
   id: number;
   title: string;
   description: string;
-  ingredients: string[];
-  imageUrl: string;
+  imageUrl?: string;
+
+  constructor(id: number, name: string, description: string, imageUrl: string) {
+    this.id = id;
+    this.title = name;
+    this.description = description;
+    this.imageUrl = imageUrl || '';
+  }
+}
+
+class Recipe extends RecipeBrief {
+  ingredients?: string[];
 
   constructor(
     id: number,
     name: string,
     description: string,
-    ingredients: string[],
     imageUrl: string,
+    ingredients?: string[],
   ) {
-    this.id = id;
-    this.title = name;
-    this.description = description;
+    super(id, name, description, imageUrl);
     this.ingredients = ingredients || [];
-    this.imageUrl = imageUrl || '';
   }
 }
 
-export { Recipe };
+export { Recipe, RecipeBrief };

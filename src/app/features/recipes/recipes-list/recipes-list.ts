@@ -1,13 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { RecipesCard } from '../recipes-card/recipes-card';
-import RecipesService from '../recipes.service';
 import { Recipe } from '../recipe.model';
-import { ResourceState } from '../../../core/interfaces/resource-state';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { RECIPES_ROUTES } from '../constants';
 import { LoaderComponent } from '../../../shared/loader/loader';
+import RecipeListService from '../services/recipe-list.service';
 
 @Component({
   selector: 'app-recipes-list',
@@ -17,17 +16,11 @@ import { LoaderComponent } from '../../../shared/loader/loader';
 })
 export class RecipesList {
   router = inject(Router);
-  recipesService = inject(RecipesService);
+  recipeListService = inject(RecipeListService);
 
-  resource: ResourceState<Recipe[]> = { data: null, loading: true, error: null };
-
-  recipes: Recipe[] | null = this.resource.data;
-  loading = this.resource.loading;
-  error = this.resource.error;
-
-  constructor() {
-    // this.resource = this.recipesService.getRecipes();
-  }
+  recipes = this.recipeListService.recipes;
+  loading = this.recipeListService.loading;
+  error = this.recipeListService.error;
 
   onCreateRecipe() {
     this.router.navigate([RECIPES_ROUTES.CREATE_RECIPE]);

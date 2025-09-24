@@ -8,14 +8,23 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import RecipesService from '../recipes.service';
 import { Recipe } from '../recipe.model';
 import { MainLayout } from '../../../shared/layout/main-layout/main-layout';
 import { ImageUpload } from '../../../shared/components/image-upload/image-upload';
 
 @Component({
   selector: 'app-manage-recipe',
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatCardModule, MatExpansionModule, MatSnackBarModule, MainLayout, ImageUpload],
+  imports: [
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatExpansionModule,
+    MatSnackBarModule,
+    ImageUpload,
+  ],
   templateUrl: './manage-recipe.html',
   styleUrl: './manage-recipe.css',
 })
@@ -30,7 +39,6 @@ export class ManageRecipe implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-  private recipesService = inject(RecipesService);
   private snackBar = inject(MatSnackBar);
 
   ngOnInit() {
@@ -40,8 +48,6 @@ export class ManageRecipe implements OnInit {
     if (this.mode === 'edit') {
       this.recipeId = +this.route.snapshot.params['id'];
       // TODO: Handle loading and error states
-      this.recipe = this.recipesService.getRecipe(this.recipeId).data!;
-
 
       if (!this.recipe) {
         this.snackBar.open('Recipe not found', 'Close', { duration: 3000 });
@@ -54,7 +60,7 @@ export class ManageRecipe implements OnInit {
         description: this.recipe.description,
         imageUrl: this.recipe.imageUrl,
       });
-      this.imageSrc = this.recipe.imageUrl;
+      // this.imageSrc = this.recipe.imageUrl;
     }
   }
 
@@ -82,13 +88,12 @@ export class ManageRecipe implements OnInit {
         ...recipeData,
         ingredients: [],
       };
-      this.recipesService.addRecipe(newRecipe);
     } else if (this.mode === 'edit' && this.recipe) {
       const updatedRecipe: Recipe = {
         ...this.recipe,
         ...recipeData,
       };
-      this.recipesService.updateRecipe(updatedRecipe);
+      // this.recipesService.updateRecipe(updatedRecipe);
     }
 
     this.router.navigate(['/']);
