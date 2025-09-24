@@ -1,6 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,11 +7,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router, ROUTES } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from '../recipe.model';
 import { ImageUpload } from '../../../shared/components/image-upload/image-upload';
 import { RecipeItemService } from '../services/recipe-item.service';
 import { RECIPES_ROUTES } from '../constants';
+
+type ManageRecipeMode = 'create' | 'edit';
 
 @Component({
   selector: 'app-manage-recipe',
@@ -31,124 +32,172 @@ import { RECIPES_ROUTES } from '../constants';
   styleUrl: './manage-recipe.css',
 })
 export class ManageRecipe {
-  mode: 'create' | 'edit' = 'create';
-  recipeId?: number;
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly recipeItemService = inject(RecipeItemService);
 
-  recipeForm!: FormGroup;
-  imageSrc: string | null = null;
-  recipe: Recipe | undefined;
+  private recipe = signal<Recipe | undefined>(undefined);
+  private recipeId?: number;
 
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private fb = inject(FormBuilder);
-  private snackBar = inject(MatSnackBar);
-  private recipeItemService = inject(RecipeItemService);
+  readonly mode = signal<ManageRecipeMode>('create');
+  readonly recipeForm: FormGroup;
+  readonly imageSrc = signal<string | null>(null);
 
   constructor() {
-    this.mode = this.route.snapshot.data['mode'] || 'create';
-    this.initializeForm();
+    this.recipeForm = this.createForm();
+    this.setupComponent();
+  }
 
-    if (this.mode === 'edit') {
-      this.recipeId = +this.route.snapshot.params['id'];
+  get headerText(): string {
+    return this.mode() === 'create' ? 'Create New Recipe' : 'Edit Recipe';
+  }
 
-      if (this.recipeId) {
-        this.recipeItemService.loadRecipeById(this.recipeId).subscribe({
-          next: (recipe) => {
-            this.recipe = recipe;
-            this.recipeForm.patchValue({
-              title: recipe.title,
-              description: recipe.description,
-              imageUrl: recipe.imageUrl,
-            });
-            this.imageSrc = recipe.imageUrl || null;
-          },
-          error: (error) => {
-            this.snackBar.open('Recipe not found: ' + error.message, 'Close', { duration: 3000 });
-            this.router.navigate(['/']);
-          },
-        });
-      } else {
-        this.snackBar.open('Invalid recipe ID', 'Close', { duration: 3000 });
-        this.router.navigate(['/']);
-      }
+  get buttonText(): string {
+    return this.mode() === 'create' ? 'Create Recipe' : 'Update Recipe';
+  }
+
+  get buttonIcon(): string {
+    return this.mode() === 'create' ? 'library_add' : 'update';
+  }
+
+  onSubmit(): void {
+    if (!this.recipeForm.valid) return;
+
+    const recipeData = this.prepareRecipeData();
+
+    if (this.mode() === 'create') {
+      this.createRecipe(recipeData);
+    } else if (this.mode() === 'edit' && this.recipe()) {
+      this.updateRecipe(recipeData);
     }
   }
 
-  private initializeForm() {
-    this.recipeForm = this.fb.group({
+  onCancel(): void {
+    this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
+  }
+
+  onImageSrcChange(imageSrc: string | null): void {
+    this.imageSrc.set(imageSrc);
+    this.recipeForm.patchValue({ imageUrl: imageSrc || '' });
+  }
+
+  private createForm(): FormGroup {
+    return this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
       imageUrl: [''],
     });
   }
 
-  onSubmit() {
-    if (!this.recipeForm.valid) return;
+  private setupComponent(): void {
+    const routeMode = this.route.snapshot.data['mode'] as ManageRecipeMode;
+    this.mode.set(routeMode || 'create');
 
+    if (this.mode() === 'edit') {
+      this.setupEditMode();
+    }
+
+    this.setupEffects();
+  }
+
+  private setupEditMode(): void {
+    this.recipeId = +this.route.snapshot.params['id'];
+
+    if (this.recipeId) {
+      this.recipeItemService.loadRecipeById(this.recipeId);
+    } else {
+      this.handleInvalidId();
+    }
+  }
+
+  private setupEffects(): void {
+    effect(() => {
+      const currentRecipe = this.recipeItemService.currentRecipe();
+      if (currentRecipe) {
+        this.recipe.set(currentRecipe);
+        this.updateFormWithRecipe(currentRecipe);
+      }
+    });
+
+    effect(() => {
+      const error = this.recipeItemService.error();
+      if (error) {
+        this.handleServiceError(error);
+      }
+    });
+  }
+
+  private updateFormWithRecipe(recipe: Recipe): void {
+    this.recipeForm.patchValue({
+      title: recipe.title,
+      description: recipe.description,
+      imageUrl: recipe.imageUrl,
+    });
+    this.imageSrc.set(recipe.imageUrl || null);
+  }
+
+  private prepareRecipeData(): Partial<Recipe> {
     const formValue = this.recipeForm.value;
-    const recipeData = {
+    return {
       title: formValue.title,
       description: formValue.description,
       imageUrl: formValue.imageUrl || '',
     };
-
-    if (this.mode === 'create') {
-      const newRecipe: Recipe = {
-        id: 0,
-        ...recipeData,
-        ingredients: [],
-        owner: 'to-set-on-the-backend',
-      };
-      this.recipeItemService.addRecipe(newRecipe).subscribe({
-        next: (createdRecipe) => {
-          this.snackBar.open('Recipe created successfully', 'Dismiss', { duration: 3000 });
-          this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
-        },
-        error: (error) => {
-          this.snackBar.open('Failed to create recipe: ' + error.message, 'Dismiss', {
-            duration: 3000,
-          });
-        },
-      });
-    } else if (this.mode === 'edit' && this.recipe) {
-      const updatedRecipe: Recipe = {
-        ...this.recipe,
-        ...recipeData,
-      };
-      this.recipeItemService.editRecipe(updatedRecipe).subscribe({
-        next: (updatedRecipe) => {
-          this.snackBar.open('Recipe updated successfully', 'Dismiss', { duration: 3000 });
-          this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
-        },
-        error: (error) => {
-          this.snackBar.open('Failed to update recipe: ' + error.message, 'Dismiss', {
-            duration: 3000,
-          });
-        },
-      });
-    }
   }
 
-  // handleRecipeOperationResult method removed as we're now handling responses directly in the subscriptions
+  private createRecipe(recipeData: Partial<Recipe>): void {
+    const newRecipe: Recipe = {
+      id: 0,
+      ...recipeData,
+      title: recipeData.title || '',
+      description: recipeData.description || '',
+      ingredients: [],
+      owner: 'to-set-on-the-backend',
+    };
 
-  onCancel() {
-    this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
+    this.recipeItemService.addRecipe(
+      newRecipe,
+      () => this.handleSuccess('Recipe created successfully'),
+      (error) => this.handleError('Failed to create recipe', error),
+    );
   }
 
-  onImageSrcChange(imageSrc: string | null) {
-    this.imageSrc = imageSrc;
-    this.recipeForm.patchValue({ imageUrl: imageSrc || '' });
+  private updateRecipe(recipeData: Partial<Recipe>): void {
+    const currentRecipe = this.recipe();
+    if (!currentRecipe) return;
+
+    const updatedRecipe: Recipe = {
+      ...currentRecipe,
+      ...recipeData,
+    };
+
+    this.recipeItemService.editRecipe(
+      updatedRecipe,
+      () => this.handleSuccess('Recipe updated successfully'),
+      (error) => this.handleError('Failed to update recipe', error),
+    );
   }
 
-  get headerText(): string {
-    return this.mode === 'create' ? 'Create New Recipe' : 'Edit Recipe';
+  private handleSuccess(message: string): void {
+    this.snackBar.open(message, 'Dismiss', { duration: 3000 });
+    this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
   }
 
-  get buttonText(): string {
-    return this.mode === 'create' ? 'Create Recipe' : 'Update Recipe';
+  private handleError(prefix: string, error: any): void {
+    this.snackBar.open(`${prefix}: ${error.message}`, 'Dismiss', {
+      duration: 3000,
+    });
   }
 
-  get buttonIcon(): string {
-    return this.mode === 'create' ? 'library_add' : 'update';
+  private handleServiceError(error: string): void {
+    this.snackBar.open('Recipe not found: ' + error, 'Close', { duration: 3000 });
+    this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
+  }
+
+  private handleInvalidId(): void {
+    this.snackBar.open('Invalid recipe ID', 'Close', { duration: 3000 });
+    this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
   }
 }

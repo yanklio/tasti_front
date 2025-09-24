@@ -25,13 +25,11 @@ export class RecipeItemService {
     error: this.error,
   };
 
-  loadRecipeById(id: number): Observable<Recipe> {
+  loadRecipeById(id: number): void {
     this._loading.set(true);
     this._error.set(null);
 
-    const request = this.http.get<Recipe>(this.apiUrl + id + '/');
-
-    request.subscribe({
+    this.http.get<Recipe>(this.apiUrl + id + '/').subscribe({
       next: (recipe) => {
         this._currentRecipe.set(recipe);
         this._loading.set(false);
@@ -41,67 +39,59 @@ export class RecipeItemService {
         this._loading.set(false);
       },
     });
-
-    return request;
   }
 
-  addRecipe(recipe: Recipe): Observable<Recipe> {
+  addRecipe(recipe: Recipe, onSuccess?: () => void, onError?: (error: any) => void): void {
     this._loading.set(true);
     this._error.set(null);
 
-    const request = this.http.post<Recipe>(this.apiUrl, recipe);
-
-    request.subscribe({
+    this.http.post<Recipe>(this.apiUrl, recipe).subscribe({
       next: (recipe) => {
         this._currentRecipe.set(recipe);
         this._loading.set(false);
+        if (onSuccess) onSuccess();
       },
       error: (error) => {
         this._error.set(error.message);
         this._loading.set(false);
+        if (onError) onError(error);
       },
     });
-
-    return request;
   }
 
-  editRecipe(recipe: Recipe): Observable<Recipe> {
+  editRecipe(recipe: Recipe, onSuccess?: () => void, onError?: (error: any) => void): void {
     this._loading.set(true);
     this._error.set(null);
 
-    const request = this.http.put<Recipe>(this.apiUrl + recipe.id + '/', recipe);
-
-    request.subscribe({
+    this.http.put<Recipe>(this.apiUrl + recipe.id + '/', recipe).subscribe({
       next: (recipe) => {
         this._currentRecipe.set(recipe);
         this._loading.set(false);
+        if (onSuccess) onSuccess();
       },
       error: (error) => {
         this._error.set(error.message);
         this._loading.set(false);
+        if (onError) onError(error);
       },
     });
-
-    return request;
   }
 
-  deleteRecipe(id: number): Observable<void> {
+  deleteRecipe(id: number, onSuccess?: () => void, onError?: (error: any) => void): void {
     this._loading.set(true);
     this._error.set(null);
 
-    const request = this.http.delete<void>(this.apiUrl + id + '/');
-
-    request.subscribe({
+    this.http.delete<void>(this.apiUrl + id + '/').subscribe({
       next: () => {
         this._currentRecipe.set(null);
         this._loading.set(false);
+        if (onSuccess) onSuccess();
       },
       error: (error) => {
         this._error.set(error.message);
         this._loading.set(false);
+        if (onError) onError(error);
       },
     });
-
-    return request;
   }
 }
