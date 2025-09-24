@@ -1,9 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { RECIPES_API_ENDPOINTS } from '../constants';
 import { Recipe } from '../recipe.model';
 import { HttpClient } from '@angular/common/http';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 
 @Injectable()
 export class RecipeItemService {
@@ -12,7 +12,7 @@ export class RecipeItemService {
   private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE;
 
   private _currentRecipe = signal<Recipe | null>(null);
-  private _loading = signal(true);
+  private _loading = signal(false);
   private _error = signal<string | null>(null);
 
   readonly currentRecipe = this._currentRecipe.asReadonly();
@@ -25,73 +25,87 @@ export class RecipeItemService {
     error: this.error,
   };
 
-  loadRecipeById(id: number): void {
-    this._loading.set(true);
-    this._error.set(null);
-
-    this.http.get<Recipe>(this.apiUrl + id + '/').subscribe({
-      next: (recipe) => {
-        this._currentRecipe.set(recipe);
-        this._loading.set(false);
-      },
-      error: (error) => {
-        this._error.set(error.message);
-        this._loading.set(false);
-      },
-    });
+  clearCurrentRecipe() {
+    this._currentRecipe.set(null);
   }
 
-  addRecipe(recipe: Recipe, onSuccess?: () => void, onError?: (error: any) => void): void {
+  loadRecipeById(id: number): Observable<Recipe> {
     this._loading.set(true);
     this._error.set(null);
 
-    this.http.post<Recipe>(this.apiUrl, recipe).subscribe({
-      next: (recipe) => {
+    return this.http.get<Recipe>(this.apiUrl + id + '/').pipe(
+      tap((recipe) => {
+        this._currentRecipe.set(recipe);
+        this._loading.set(false);
+      }),
+      catchError((error) => {
+        this._error.set(error.message);
+        this._loading.set(false);
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  addRecipe(recipe: Recipe): Observable<Recipe> {
+    this._loading.set(true);
+    this._error.set(null);
+
+    return this.http.post<Recipe>(this.apiUrl, recipe).pipe(
+      tap((recipe) => {
+        this._currentRecipe.set(recipe);
+        this._loading.set(false);
+      }),
+      catchError((error) => {
+        this._error.set(error.message);
+        this._loading.set(false);
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  editRecipe(
+    recipe: Recipe,
+    onSuccess?: () => void,
+    onError?: (error: any) => void,
+  ): Observable<Recipe> {
+    this._loading.set(true);
+    this._error.set(null);
+
+    return this.http.put<Recipe>(this.apiUrl + recipe.id + '/', recipe).pipe(
+      tap((recipe) => {
         this._currentRecipe.set(recipe);
         this._loading.set(false);
         if (onSuccess) onSuccess();
-      },
-      error: (error) => {
+      }),
+      catchError((error) => {
         this._error.set(error.message);
         this._loading.set(false);
         if (onError) onError(error);
-      },
-    });
+        return throwError(() => error);
+      }),
+    );
   }
 
-  editRecipe(recipe: Recipe, onSuccess?: () => void, onError?: (error: any) => void): void {
+  deleteRecipe(
+    id: number,
+    onSuccess?: () => void,
+    onError?: (error: any) => void,
+  ): Observable<void> {
     this._loading.set(true);
     this._error.set(null);
 
-    this.http.put<Recipe>(this.apiUrl + recipe.id + '/', recipe).subscribe({
-      next: (recipe) => {
-        this._currentRecipe.set(recipe);
-        this._loading.set(false);
-        if (onSuccess) onSuccess();
-      },
-      error: (error) => {
-        this._error.set(error.message);
-        this._loading.set(false);
-        if (onError) onError(error);
-      },
-    });
-  }
-
-  deleteRecipe(id: number, onSuccess?: () => void, onError?: (error: any) => void): void {
-    this._loading.set(true);
-    this._error.set(null);
-
-    this.http.delete<void>(this.apiUrl + id + '/').subscribe({
-      next: () => {
+    return this.http.delete<void>(this.apiUrl + id + '/').pipe(
+      tap(() => {
         this._currentRecipe.set(null);
         this._loading.set(false);
         if (onSuccess) onSuccess();
-      },
-      error: (error) => {
+      }),
+      catchError((error) => {
         this._error.set(error.message);
         this._loading.set(false);
         if (onError) onError(error);
-      },
-    });
+        return throwError(() => error);
+      }),
+    );
   }
 }

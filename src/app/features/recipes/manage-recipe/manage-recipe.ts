@@ -12,6 +12,7 @@ import { Recipe } from '../recipe.model';
 import { ImageUpload } from '../../../shared/components/image-upload/image-upload';
 import { RecipeItemService } from '../services/recipe-item.service';
 import { RECIPES_ROUTES } from '../constants';
+import { LoaderComponent } from '../../../shared/loader/loader';
 
 type ManageRecipeMode = 'create' | 'edit';
 
@@ -27,6 +28,7 @@ type ManageRecipeMode = 'create' | 'edit';
     MatExpansionModule,
     MatSnackBarModule,
     ImageUpload,
+    LoaderComponent,
   ],
   templateUrl: './manage-recipe.html',
   styleUrl: './manage-recipe.css',
@@ -38,12 +40,15 @@ export class ManageRecipe {
   private readonly snackBar = inject(MatSnackBar);
   private readonly recipeItemService = inject(RecipeItemService);
 
-  private recipe = signal<Recipe | undefined>(undefined);
   private recipeId?: number;
 
   readonly mode = signal<ManageRecipeMode>('create');
   readonly recipeForm: FormGroup;
   readonly imageSrc = signal<string | null>(null);
+
+  readonly recipe = this.recipeItemService.currentRecipe;
+  readonly loading = this.recipeItemService.loading;
+  readonly error = this.recipeItemService.error;
 
   constructor() {
     this.recipeForm = this.createForm();
@@ -99,6 +104,10 @@ export class ManageRecipe {
       this.setupEditMode();
     }
 
+    if (this.mode() === 'create') {
+      this.recipeItemService.clearCurrentRecipe();
+    }
+
     this.setupEffects();
   }
 
@@ -106,7 +115,14 @@ export class ManageRecipe {
     this.recipeId = +this.route.snapshot.params['id'];
 
     if (this.recipeId) {
-      this.recipeItemService.loadRecipeById(this.recipeId);
+      this.recipeItemService.loadRecipeById(this.recipeId).subscribe({
+        next: (recipe) => {
+          this.updateFormWithRecipe(recipe);
+        },
+        error: (error) => {
+          this.handleServiceError(error);
+        },
+      });
     } else {
       this.handleInvalidId();
     }
@@ -114,17 +130,14 @@ export class ManageRecipe {
 
   private setupEffects(): void {
     effect(() => {
-      const currentRecipe = this.recipeItemService.currentRecipe();
-      if (currentRecipe) {
-        this.recipe.set(currentRecipe);
-        this.updateFormWithRecipe(currentRecipe);
+      if (this.recipe()) {
+        this.updateFormWithRecipe(this.recipe()!);
       }
     });
 
     effect(() => {
-      const error = this.recipeItemService.error();
-      if (error) {
-        this.handleServiceError(error);
+      if (this.error()) {
+        this.handleServiceError(this.error()!);
       }
     });
   }
@@ -157,11 +170,10 @@ export class ManageRecipe {
       owner: 'to-set-on-the-backend',
     };
 
-    this.recipeItemService.addRecipe(
-      newRecipe,
-      () => this.handleSuccess('Recipe created successfully'),
-      (error) => this.handleError('Failed to create recipe', error),
-    );
+    this.recipeItemService.addRecipe(newRecipe).subscribe({
+      next: () => this.handleSuccess('Recipe created successfully'),
+      error: (error) => this.handleError('Failed to create recipe', error),
+    });
   }
 
   private updateRecipe(recipeData: Partial<Recipe>): void {
@@ -173,11 +185,10 @@ export class ManageRecipe {
       ...recipeData,
     };
 
-    this.recipeItemService.editRecipe(
-      updatedRecipe,
-      () => this.handleSuccess('Recipe updated successfully'),
-      (error) => this.handleError('Failed to update recipe', error),
-    );
+    this.recipeItemService.editRecipe(updatedRecipe).subscribe({
+      next: () => this.handleSuccess('Recipe updated successfully'),
+      error: (error) => this.handleError('Failed to update recipe', error),
+    });
   }
 
   private handleSuccess(message: string): void {

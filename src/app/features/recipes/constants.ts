@@ -7,6 +7,6 @@ export const RECIPES_ROUTES = {
 export const RECIPES_API_ENDPOINTS = {
   BASE: 'recipes/',
   CREATE_RECIPE: '',
-  EDIT_RECIPE: '/:id',
-  DELETE_RECIPE: '/:id',
+  EDIT_RECIPE: '',
+  DELETE_RECIPE: '',
 };
