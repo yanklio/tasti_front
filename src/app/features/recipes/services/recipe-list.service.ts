@@ -11,7 +11,7 @@ import { PaginatedResponse } from '../../../core/models/paginated-response';
 export default class RecipeListService {
   private http = inject(HttpClient);
 
-  private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE;
+  private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE + '/';
 
   private _recipes = signal<RecipeBrief[]>([]);
   private _loading = signal(true);

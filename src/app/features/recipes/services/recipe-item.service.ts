@@ -9,7 +9,7 @@ import { Observable, catchError, tap, throwError } from 'rxjs';
 export class RecipeItemService {
   private http = inject(HttpClient);
 
-  private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE;
+  private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE + '/';
 
   private _currentRecipe = signal<Recipe | null>(null);
   private _loading = signal(false);

@@ -13,6 +13,7 @@ import { ImageUpload } from '../../../shared/components/image-upload/image-uploa
 import { RecipeItemService } from '../services/recipe-item.service';
 import { RECIPES_ROUTES } from '../constants';
 import { LoaderComponent } from '../../../shared/loader/loader';
+import { GLOBAL_ROUTES } from '../../../constants';
 
 type ManageRecipeMode = 'create' | 'edit';
 
@@ -193,7 +194,7 @@ export class ManageRecipe {
 
   private handleSuccess(message: string): void {
     this.snackBar.open(message, 'Dismiss', { duration: 3000 });
-    this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
+    this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
   }
 
   private handleError(prefix: string, error: any): void {
@@ -204,11 +205,11 @@ export class ManageRecipe {
 
   private handleServiceError(error: string): void {
     this.snackBar.open('Recipe not found: ' + error, 'Close', { duration: 3000 });
-    this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
+    this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
   }
 
   private handleInvalidId(): void {
     this.snackBar.open('Invalid recipe ID', 'Close', { duration: 3000 });
-    this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
+    this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
   }
 }

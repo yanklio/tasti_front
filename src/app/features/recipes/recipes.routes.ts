@@ -3,6 +3,7 @@ import { Recipes } from './recipes';
 import { ManageRecipe } from './manage-recipe/manage-recipe';
 import { RECIPES_ROUTES } from './constants';
 import { RecipesList } from './recipes-list/recipes-list';
+import { RecipeItem } from './recipe-item/recipe-item';
 
 export const recipesRoutes: Routes = [
   {
@@ -21,10 +22,15 @@ export const recipesRoutes: Routes = [
         data: { mode: 'create' },
       },
       {
-        path: RECIPES_ROUTES.EDIT_RECIPE,
+        path: RECIPES_ROUTES.EDIT_RECIPE + '/:id',
         component: ManageRecipe,
         title: 'Edit Recipe',
         data: { mode: 'edit' },
+      },
+      {
+        path: ':id',
+        component: RecipeItem,
+        title: 'Recipe Detail',
       },
     ],
   },
