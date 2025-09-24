@@ -21,7 +21,7 @@
 }
 
 .back-button {
-  background-color: var(--mat-icon-button-toggle-selected-state-layer-color);
+  background-color: var(--mat-sys-surface-variant);
   border-radius: 50%;
 }
 

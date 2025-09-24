@@ -5,15 +5,44 @@
   position: relative;
 }
 
+.list-wrapper {
+  /*height: 100%;*/
+  display: block;
+  box-sizing: border-box;
+  /*padding-bottom: 24px;*/
+}
+
 .recipes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 24px;
-  padding-bottom: 120px;
+  padding-bottom: 40px;
+}
+
+/* Custom Card-like Paginator Styling */
+.card-paginator {
+  border-radius: 12px 12px 0 0;
+  border: 1px solid var(--mat-card-outline-color, rgba(0, 0, 0, 0.12));
+  overflow: hidden;
+  box-shadow: var(--mat-card-container-elevation-shadow);
+  transition:
+    transform var(--mat-expansion-panel-container-animation-duration, 0.2s),
+    box-shadow var(--mat-expansion-panel-container-animation-duration, 0.2s);
+  padding: 8px 16px;
+}
+
+.card-paginator:hover {
+  box-shadow: var(--mat-card-elevated-state-layer-shadow);
+}
+
+/* Original paginator styles */
+mat-paginator {
+  padding-bottom: 0px;
+  width: calc(100% - 220px);
 }
 
 button.create-recipe {
   position: fixed;
-  bottom: 24px;
+  bottom: 20px;
   right: 24px;
 }
