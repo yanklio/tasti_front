@@ -38,12 +38,15 @@ export default class RecipeListService {
     return this.http.get<PaginatedResponse<RecipeBrief>>(this.apiUrl).pipe(
       tap((response) => {
         const transformedRecipes =
-          response.results?.map((apiRecipe: any) => ({
-            id: apiRecipe.id,
-            title: apiRecipe.title || apiRecipe.name,
-            description: apiRecipe.description,
-            imageUrl: apiRecipe.imageUrl || apiRecipe.image_url || apiRecipe.image || '',
-          })) || [];
+          response.results?.map(
+            (apiRecipe: any) =>
+              ({
+                ...apiRecipe,
+                createAt: apiRecipe.created_at,
+                // TO DO: get images from API
+                imageUrl: '',
+              }) as RecipeBrief,
+          ) || [];
 
         this._recipes.set(transformedRecipes);
       }),

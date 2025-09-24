@@ -1,5 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,10 +8,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, ROUTES } from '@angular/router';
 import { Recipe } from '../recipe.model';
-import { MainLayout } from '../../../shared/layout/main-layout/main-layout';
 import { ImageUpload } from '../../../shared/components/image-upload/image-upload';
+import { RecipeItemService } from '../services/recipe-item.service';
+import { RECIPES_ROUTES } from '../constants';
 
 @Component({
   selector: 'app-manage-recipe',
@@ -28,7 +30,7 @@ import { ImageUpload } from '../../../shared/components/image-upload/image-uploa
   templateUrl: './manage-recipe.html',
   styleUrl: './manage-recipe.css',
 })
-export class ManageRecipe implements OnInit {
+export class ManageRecipe {
   mode: 'create' | 'edit' = 'create';
   recipeId?: number;
 
@@ -40,27 +42,35 @@ export class ManageRecipe implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private snackBar = inject(MatSnackBar);
+  private recipeItemService = inject(RecipeItemService);
 
-  ngOnInit() {
+  constructor() {
     this.mode = this.route.snapshot.data['mode'] || 'create';
     this.initializeForm();
 
     if (this.mode === 'edit') {
       this.recipeId = +this.route.snapshot.params['id'];
-      // TODO: Handle loading and error states
 
-      if (!this.recipe) {
-        this.snackBar.open('Recipe not found', 'Close', { duration: 3000 });
+      if (this.recipeId) {
+        this.recipeItemService.loadRecipeById(this.recipeId).subscribe({
+          next: (recipe) => {
+            this.recipe = recipe;
+            this.recipeForm.patchValue({
+              title: recipe.title,
+              description: recipe.description,
+              imageUrl: recipe.imageUrl,
+            });
+            this.imageSrc = recipe.imageUrl || null;
+          },
+          error: (error) => {
+            this.snackBar.open('Recipe not found: ' + error.message, 'Close', { duration: 3000 });
+            this.router.navigate(['/']);
+          },
+        });
+      } else {
+        this.snackBar.open('Invalid recipe ID', 'Close', { duration: 3000 });
         this.router.navigate(['/']);
-        return;
       }
-
-      this.recipeForm.patchValue({
-        title: this.recipe.title,
-        description: this.recipe.description,
-        imageUrl: this.recipe.imageUrl,
-      });
-      // this.imageSrc = this.recipe.imageUrl;
     }
   }
 
@@ -87,20 +97,42 @@ export class ManageRecipe implements OnInit {
         id: 0,
         ...recipeData,
         ingredients: [],
+        owner: 'to-set-on-the-backend',
       };
+      this.recipeItemService.addRecipe(newRecipe).subscribe({
+        next: (createdRecipe) => {
+          this.snackBar.open('Recipe created successfully', 'Dismiss', { duration: 3000 });
+          this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
+        },
+        error: (error) => {
+          this.snackBar.open('Failed to create recipe: ' + error.message, 'Dismiss', {
+            duration: 3000,
+          });
+        },
+      });
     } else if (this.mode === 'edit' && this.recipe) {
       const updatedRecipe: Recipe = {
         ...this.recipe,
         ...recipeData,
       };
-      // this.recipesService.updateRecipe(updatedRecipe);
+      this.recipeItemService.editRecipe(updatedRecipe).subscribe({
+        next: (updatedRecipe) => {
+          this.snackBar.open('Recipe updated successfully', 'Dismiss', { duration: 3000 });
+          this.router.navigate(['/' + RECIPES_ROUTES.RECIPES_LIST]);
+        },
+        error: (error) => {
+          this.snackBar.open('Failed to update recipe: ' + error.message, 'Dismiss', {
+            duration: 3000,
+          });
+        },
+      });
     }
-
-    this.router.navigate(['/']);
   }
 
+  // handleRecipeOperationResult method removed as we're now handling responses directly in the subscriptions
+
   onCancel() {
-    this.router.navigate(['/']);
+    this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
   }
 
   onImageSrcChange(imageSrc: string | null) {
