@@ -1,0 +1,49 @@
+<div class="recipe-container">
+  @if (loading()) {
+  <app-loader></app-loader>
+  } @else {
+  <div class="recipe-header">
+    <button mat-icon-button class="back-button" (click)="onBack()" aria-label="Go back">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <p>Recipe Detail</p>
+  </div>
+
+  @if (recipe() && !loading()) {
+  <button
+    mat-fab
+    extended
+    color="primary"
+    class="edit-fab-button"
+    (click)="onEditRecipe()"
+    aria-label="Edit recipe"
+  >
+    <mat-icon>edit</mat-icon>
+    Edit Recipe
+  </button>
+  } @if (error()) {
+  <div class="error-message">{{ error() }}</div>
+  } @if (recipe()) {
+  <mat-card appearance="outlined" class="recipe-card">
+    @if (recipe()?.imageUrl) {
+    <img mat-card-image [src]="recipe()?.imageUrl" [alt]="recipe()?.title" />
+    }
+
+    <mat-card-content>
+      <h2 class="recipe-title">{{ recipe()?.title }}</h2>
+      <p class="recipe-owner">Created by: {{ recipe()?.owner }}</p>
+
+      <p class="recipe-description">{{ recipe()?.description }}</p>
+
+      @if (recipe()?.ingredients?.length) {
+      <h3>Ingredients:</h3>
+      <ul class="ingredients-list">
+        @for (ingredient of recipe()?.ingredients; track ingredient) {
+        <li>{{ ingredient }}</li>
+        }
+      </ul>
+      }
+    </mat-card-content>
+  </mat-card>
+  } }
+</div>
