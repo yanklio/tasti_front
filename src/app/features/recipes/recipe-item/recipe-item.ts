@@ -41,7 +41,7 @@ export class RecipeItem {
   onEditRecipe(): void {
     const recipe = this.recipe();
     if (recipe) {
-      this.router.navigate(['/', GLOBAL_ROUTES.RECIPES, RECIPES_ROUTES.EDIT_RECIPE, recipe.id]);
+      this.router.navigate([RECIPES_ROUTES.EDIT_RECIPE, recipe.id]);
     }
   }
 }
