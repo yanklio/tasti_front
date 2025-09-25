@@ -1,0 +1,10 @@
+<div class="empty-state">
+  @if (icon()) {
+    <mat-icon
+      [style.font-size.px]="iconSize()"
+      [style.height.px]="iconSize()"
+      [style.width.px]="iconSize()"
+    >{{ icon() }}</mat-icon>
+  }
+  <p [style.font-size.px]="textSize()" [style.line-height.px]="textSize()">{{ text() }}</p>
+</div>
