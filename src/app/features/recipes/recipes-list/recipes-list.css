@@ -9,40 +9,53 @@
   /*height: 100%;*/
   display: block;
   box-sizing: border-box;
-  /*padding-bottom: 24px;*/
+  padding-bottom: 80px;
 }
 
 .recipes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 24px;
-  padding-bottom: 40px;
+}
+
+app-empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* Custom Card-like Paginator Styling */
 .card-paginator {
-  border-radius: 12px 12px 0 0;
-  border: 1px solid var(--mat-card-outline-color, rgba(0, 0, 0, 0.12));
-  overflow: hidden;
+  position: fixed;
+  right: 200px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-bottom: 0px;
   box-shadow: var(--mat-card-container-elevation-shadow);
+  
   transition:
     transform var(--mat-expansion-panel-container-animation-duration, 0.2s),
     box-shadow var(--mat-expansion-panel-container-animation-duration, 0.2s);
+  
   padding: 8px 16px;
-}
+  margin-left: 120px;
 
-.card-paginator:hover {
-  box-shadow: var(--mat-card-elevated-state-layer-shadow);
-}
+  z-index: 10;
 
-/* Original paginator styles */
-mat-paginator {
-  padding-bottom: 0px;
-  width: calc(100% - 220px);
+  width: auto;
+  max-width: 810px;
+
+  border-radius: 12px 12px 0 0;
+  bottom: 0;
+
 }
 
 button.create-recipe {
   position: fixed;
-  bottom: 20px;
+  bottom: 16px;
   right: 24px;
 }

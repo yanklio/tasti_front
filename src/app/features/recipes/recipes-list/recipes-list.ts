@@ -7,12 +7,14 @@ import { LoaderComponent } from '../../../shared/loader/loader';
 import RecipeListService from '../services/recipe-list.service';
 import { RecipesCard } from './recipes-card/recipes-card';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { EmptyState } from '../../../shared/components/empty-state/empty-state';
+
 
 @Component({
   selector: 'app-recipes-list',
   templateUrl: './recipes-list.html',
   styleUrl: './recipes-list.css',
-  imports: [RecipesCard, MatButtonModule, MatIconModule, LoaderComponent, MatPaginatorModule],
+  imports: [RecipesCard, MatButtonModule, MatIconModule, LoaderComponent, MatPaginatorModule, EmptyState],
 })
 export class RecipesList {
   router = inject(Router);

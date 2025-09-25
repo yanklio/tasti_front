@@ -4,20 +4,26 @@
   @if(loading()) {
   <app-loader></app-loader>
   } @else {
-  <div class="recipes-grid">
-    @for (recipe of recipes() || []; track recipe.id){
-    <app-recipes-card [recipe]="recipe"></app-recipes-card>
+      @if (recipes().length > 0) {
+        <div class="recipes-grid">
+          @for (recipe of recipes() || []; track recipe.id){
+            <app-recipes-card [recipe]="recipe"></app-recipes-card>
+          }
+        </div>
+      <mat-paginator
+        class="card-paginator"
+        [length]="100"
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page"
+      >
+      </mat-paginator>
     }
-  </div>
-  <mat-paginator
-    class="card-paginator"
-    [length]="100"
-    [pageSize]="10"
-    [pageSizeOptions]="[5, 10, 25, 100]"
-    aria-label="Select page"
-  >
-  </mat-paginator>
-  }
+
+  @if (recipes().length === 0) {
+    <app-empty-state text="No recipes found" icon="search_off"></app-empty-state>
+  } 
+}
 </div>
 
 <button matFab extended class="create-recipe" aria-label="Add recipe" (click)="onCreateRecipe()">
