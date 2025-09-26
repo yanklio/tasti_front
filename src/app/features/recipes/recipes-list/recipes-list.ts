@@ -8,13 +8,15 @@ import RecipeListService from '../services/recipe-list.service';
 import { RecipesCard } from './recipes-card/recipes-card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { EmptyState } from '../../../shared/components/empty-state/empty-state';
+import { AuthRequired } from '../../../core/directives/auth-required';
 
 
 @Component({
   selector: 'app-recipes-list',
   templateUrl: './recipes-list.html',
   styleUrl: './recipes-list.css',
-  imports: [RecipesCard, MatButtonModule, MatIconModule, LoaderComponent, MatPaginatorModule, EmptyState],
+  standalone: true,
+  imports: [RecipesCard, MatButtonModule, MatIconModule, LoaderComponent, MatPaginatorModule, EmptyState, AuthRequired],
 })
 export class RecipesList {
   router = inject(Router);
