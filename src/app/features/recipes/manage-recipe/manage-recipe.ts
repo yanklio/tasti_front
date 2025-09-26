@@ -12,7 +12,7 @@ import { Recipe } from '../recipe.model';
 import { ImageUpload } from '../../../shared/components/image-upload/image-upload';
 import { RecipeItemService } from '../services/recipe-item.service';
 import { RECIPES_ROUTES } from '../constants';
-import { LoaderComponent } from '../../../shared/loader/loader';
+import { LoaderComponent } from '../../../shared/components/loader/loader';
 import { GLOBAL_ROUTES } from '../../../constants';
 
 type ManageRecipeMode = 'create' | 'edit';

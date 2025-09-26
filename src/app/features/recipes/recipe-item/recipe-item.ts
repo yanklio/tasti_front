@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RecipeItemService } from '../services/recipe-item.service';
-import { LoaderComponent } from '../../../shared/loader/loader';
+import { LoaderComponent } from '../../../shared/components/loader/loader';
 import { Subscription } from 'rxjs';
 import { RECIPES_ROUTES } from '../constants';
 import { GLOBAL_ROUTES } from '../../../constants';

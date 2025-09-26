@@ -3,7 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { RECIPES_ROUTES } from '../constants';
-import { LoaderComponent } from '../../../shared/loader/loader';
+import { LoaderComponent } from '../../../shared/components/loader/loader';
 import RecipeListService from '../services/recipe-list.service';
 import { RecipesCard } from './recipes-card/recipes-card';
 import { MatPaginatorModule } from '@angular/material/paginator';
