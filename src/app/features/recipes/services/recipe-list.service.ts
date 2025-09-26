@@ -2,11 +2,15 @@ import { inject, Injectable, signal } from '@angular/core';
 import { RecipeBrief } from '../recipe.model';
 import { environment } from '../../../../environments/environment';
 import { RECIPES_API_ENDPOINTS, RECIPES_ROUTES } from '../constants';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
-import { PaginatedResponse } from '../../../core/models/paginated-response';
+import { PaginatedResponse, PaginationState } from '../../../core/models/pagination';
 
-// TODO: Send a HTTP requests to get recipes
+interface PaginationParams {
+  page: number;
+  pageSize: number;
+}
+
 @Injectable()
 export default class RecipeListService {
   private http = inject(HttpClient);
@@ -16,26 +20,38 @@ export default class RecipeListService {
   private _recipes = signal<RecipeBrief[]>([]);
   private _loading = signal(true);
   private _error = signal<string | null>(null);
+  private _paginationState = signal<PaginationState>({
+    currentPage: 1,
+    pageSize: 10,
+    totalPages: 0,
+    totalItems: 0,
+    hasNext: false,
+    nextLink: null,
+    hasPrevious: false,
+    previousLink: null,
+  });
 
   readonly recipes = this._recipes.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
+  readonly paginationState = this._paginationState.asReadonly();
 
   readonly state = {
     recipes: this.recipes,
     loading: this.loading,
     error: this.error,
+    paginationState: this.paginationState,
   };
 
-  constructor() {
-    this.loadRecipes().subscribe();
-  }
-
-  loadRecipes(): Observable<PaginatedResponse<RecipeBrief>> {
+  loadRecipes(pagination: PaginationParams): Observable<PaginatedResponse<RecipeBrief>> {
     this._loading.set(true);
     this._error.set(null);
 
-    return this.http.get<PaginatedResponse<RecipeBrief>>(this.apiUrl).pipe(
+    const params = new HttpParams()
+      .set('page', pagination.page.toString())
+      .set('page_size', pagination.pageSize.toString());
+
+    return this.http.get<PaginatedResponse<RecipeBrief>>(this.apiUrl, { params }).pipe(
       tap((response) => {
         const transformedRecipes =
           response.results?.map(
@@ -49,6 +65,18 @@ export default class RecipeListService {
           ) || [];
 
         this._recipes.set(transformedRecipes);
+
+        this._paginationState.set({
+          currentPage: pagination.page,
+          pageSize: pagination.pageSize,
+          totalPages: response.total_pages,
+          totalItems: response.total,
+          hasNext: !!response.links.next,
+          nextLink: response.links.next,
+          hasPrevious: !!response.links.previous,
+          previousLink: response.links.previous,
+        });
+
       }),
       catchError((error) => {
         this._error.set(error.message);

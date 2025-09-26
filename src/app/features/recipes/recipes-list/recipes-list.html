@@ -3,30 +3,35 @@
 <div class="list-wrapper">
   @if(loading()) {
   <app-loader></app-loader>
-  } @else {
-      @if (recipes().length > 0) {
-        <div class="recipes-grid">
-          @for (recipe of recipes() || []; track recipe.id){
-            <app-recipes-card [recipe]="recipe"></app-recipes-card>
-          }
-        </div>
-      <mat-paginator
-        class="card-paginator"
-        [length]="100"
-        [pageSize]="10"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        aria-label="Select page"
-      >
-      </mat-paginator>
+  } @else { @if (recipes().length > 0) {
+  <div class="recipes-grid">
+    @for (recipe of recipes() || []; track recipe.id){
+    <app-recipes-card [recipe]="recipe"></app-recipes-card>
     }
-
-  @if (recipes().length === 0) {
-    <app-empty-state text="No recipes found" icon="search_off"></app-empty-state>
-  } 
-}
+  </div>
+  <mat-paginator
+    class="card-paginator"
+    [length]="pagination().totalItems"
+    [pageIndex]="pagination().currentPage - 1"
+    [pageSize]="pagination().pageSize"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+  } @if (recipes().length === 0) {
+  <app-empty-state text="No recipes found" icon="search_off"></app-empty-state>
+  } }
 </div>
 
-<button matFab appAuthRequired extended class="create-recipe" aria-label="Add recipe" (click)="onCreateRecipe()">
+<button
+  matFab
+  appAuthRequired
+  extended
+  class="create-recipe"
+  aria-label="Add recipe"
+  (click)="onCreateRecipe()"
+>
   <mat-icon>add</mat-icon>
   New Recipe
 </button>
