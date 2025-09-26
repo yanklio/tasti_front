@@ -6,10 +6,11 @@ import { Router } from '@angular/router';
 import { Recipe } from '../../recipe.model';
 import { RECIPES_ROUTES } from '../../constants';
 import { GLOBAL_ROUTES } from '../../../../constants';
+import { UsernamePipe } from '../../../../core/pipes/username-pipe';
 
 @Component({
   selector: 'app-recipes-card',
-  imports: [MatCardModule, MatButtonModule, MatIconModule],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, UsernamePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './recipes-card.html',
   styleUrl: './recipes-card.css',

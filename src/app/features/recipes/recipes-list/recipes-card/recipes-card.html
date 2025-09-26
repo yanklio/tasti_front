@@ -3,7 +3,7 @@
     <img mat-card-image [src]="recipe().imageUrl" [alt]="recipe().title" />
     <mat-card-header>
       <mat-card-title>{{recipe().title}}</mat-card-title>
-      <mat-card-subtitle>{{recipe().owner}}</mat-card-subtitle>
+      <mat-card-subtitle>{{recipe().owner | username }}</mat-card-subtitle>
       <!--<div mat-card-avatar class="example-header-image"></div>-->
     </mat-card-header>
     <mat-card-content>
