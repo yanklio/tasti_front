@@ -11,7 +11,8 @@
   </div>
 
   <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="manage-recipe-form">
-    <app-image-upload (imageSrcChange)="onImageSrcChange($event)"> </app-image-upload>
+    <app-image-upload [imageSrc]="imageSrc()" (imageSrcChange)="onImageSrcChange($event)">
+    </app-image-upload>
 
     <mat-expansion-panel expanded="true" class="recipe-info-panel">
       <mat-expansion-panel-header>

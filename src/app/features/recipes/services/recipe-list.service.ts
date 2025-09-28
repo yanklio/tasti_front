@@ -1,9 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { RecipeBrief } from '../recipe.model';
+import { BackendRecipeBrief, RecipeBrief } from '../recipe.model';
 import { environment } from '../../../../environments/environment';
 import { RECIPES_API_ENDPOINTS, RECIPES_ROUTES } from '../constants';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
+import { catchError, finalize, Observable, tap, throwError, map } from 'rxjs';
 import { PaginatedResponse, PaginationState } from '../../../core/models/pagination';
 
 interface PaginationParams {
@@ -51,20 +51,16 @@ export default class RecipeListService {
       .set('page', pagination.page.toString())
       .set('page_size', pagination.pageSize.toString());
 
-    return this.http.get<PaginatedResponse<RecipeBrief>>(this.apiUrl, { params }).pipe(
+    return this.http.get<PaginatedResponse<BackendRecipeBrief>>(this.apiUrl, { params }).pipe(
+      map(
+        (response): PaginatedResponse<RecipeBrief> => ({
+          ...response,
+          results:
+            response.results?.map((backendRecipe) => RecipeBrief.fromBackend(backendRecipe)) || [],
+        }),
+      ),
       tap((response) => {
-        const transformedRecipes =
-          response.results?.map(
-            (apiRecipe: any) =>
-              ({
-                ...apiRecipe,
-                createAt: apiRecipe.created_at,
-                // TO DO: get images from API
-                imageUrl: '',
-              }) as RecipeBrief,
-          ) || [];
-
-        this._recipes.set(transformedRecipes);
+        this._recipes.set(response.results);
 
         this._paginationState.set({
           currentPage: pagination.page,
@@ -76,7 +72,6 @@ export default class RecipeListService {
           hasPrevious: !!response.links.previous,
           previousLink: response.links.previous,
         });
-
       }),
       catchError((error) => {
         this._error.set(error.message);

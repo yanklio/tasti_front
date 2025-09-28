@@ -21,7 +21,8 @@
   width: 100%;
   object-fit: cover;
   object-position: center;
-  border-radius: var(--mat-card-media-inset, 0);
+
+  border-radius: 12px 12px 0;
 }
 
 .recipe-card mat-card-content p {

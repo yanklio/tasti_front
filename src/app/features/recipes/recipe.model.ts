@@ -1,3 +1,11 @@
+interface BackendRecipeBrief {
+  id: number;
+  title: string;
+  description: string;
+  image_url?: string;
+  owner: string;
+}
+
 class RecipeBrief {
   id: number;
   title: string;
@@ -5,29 +13,76 @@ class RecipeBrief {
   imageUrl?: string;
   owner: string;
 
-  constructor(id: number, name: string, description: string, imageUrl: string, owner: string) {
+  constructor(id: number, title: string, description: string, owner: string, imageUrl?: string) {
     this.id = id;
-    this.title = name;
+    this.title = title;
     this.description = description;
-    this.imageUrl = imageUrl || '';
     this.owner = owner;
+    this.imageUrl = imageUrl;
   }
+
+  static fromBackend(backendRecipe: BackendRecipeBrief): RecipeBrief {
+    return new RecipeBrief(
+      backendRecipe.id,
+      backendRecipe.title,
+      backendRecipe.description,
+      backendRecipe.owner,
+      backendRecipe.image_url,
+    );
+  }
+
+  toBackend(): BackendRecipeBrief {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      image_url: this.imageUrl,
+      owner: this.owner,
+    };
+  }
+}
+
+interface BackendRecipe extends BackendRecipeBrief {
+  ingredients?: string[];
 }
 
 class Recipe extends RecipeBrief {
-  ingredients?: string[];
+  ingredients: string[];
 
   constructor(
     id: number,
-    name: string,
+    title: string,
     description: string,
-    imageUrl: string,
     owner: string,
+    imageUrl?: string,
     ingredients?: string[],
   ) {
-    super(id, name, description, imageUrl, owner);
+    super(id, title, description, owner, imageUrl);
     this.ingredients = ingredients || [];
+  }
+
+  static override fromBackend(backendRecipe: BackendRecipe): Recipe {
+    return new Recipe(
+      backendRecipe.id,
+      backendRecipe.title,
+      backendRecipe.description,
+      backendRecipe.owner,
+      backendRecipe.image_url,
+      backendRecipe.ingredients,
+    );
+  }
+
+  override toBackend(): BackendRecipe {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      image_url: this.imageUrl,
+      owner: this.owner,
+      ingredients: this.ingredients,
+    };
   }
 }
 
+export type { BackendRecipe, BackendRecipeBrief };
 export { Recipe, RecipeBrief };

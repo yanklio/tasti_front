@@ -1,9 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { RECIPES_API_ENDPOINTS } from '../constants';
-import { Recipe } from '../recipe.model';
+import { BackendRecipe, Recipe } from '../recipe.model';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable, catchError, tap, throwError, map } from 'rxjs';
 
 @Injectable()
 export class RecipeItemService {
@@ -33,7 +33,8 @@ export class RecipeItemService {
     this._loading.set(true);
     this._error.set(null);
 
-    return this.http.get<Recipe>(this.apiUrl + id + '/').pipe(
+    return this.http.get<BackendRecipe>(this.apiUrl + id + '/').pipe(
+      map((backendRecipe) => Recipe.fromBackend(backendRecipe)),
       tap((recipe) => {
         this._currentRecipe.set(recipe);
         this._loading.set(false);
@@ -50,7 +51,8 @@ export class RecipeItemService {
     this._loading.set(true);
     this._error.set(null);
 
-    return this.http.post<Recipe>(this.apiUrl, recipe).pipe(
+    return this.http.post<BackendRecipe>(this.apiUrl, recipe.toBackend()).pipe(
+      map((backendRecipe) => Recipe.fromBackend(backendRecipe)),
       tap((recipe) => {
         this._currentRecipe.set(recipe);
         this._loading.set(false);
@@ -71,7 +73,8 @@ export class RecipeItemService {
     this._loading.set(true);
     this._error.set(null);
 
-    return this.http.put<Recipe>(this.apiUrl + recipe.id + '/', recipe).pipe(
+    return this.http.put<BackendRecipe>(this.apiUrl + recipe.id + '/', recipe.toBackend()).pipe(
+      map((backendRecipe) => Recipe.fromBackend(backendRecipe)),
       tap((recipe) => {
         this._currentRecipe.set(recipe);
         this._loading.set(false);

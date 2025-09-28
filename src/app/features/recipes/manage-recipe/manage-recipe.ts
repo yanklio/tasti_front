@@ -162,14 +162,14 @@ export class ManageRecipe {
   }
 
   private createRecipe(recipeData: Partial<Recipe>): void {
-    const newRecipe: Recipe = {
-      id: 0,
-      ...recipeData,
-      title: recipeData.title || '',
-      description: recipeData.description || '',
-      ingredients: [],
-      owner: 'to-set-on-the-backend',
-    };
+    const newRecipe = new Recipe(
+      0,
+      recipeData.title || '',
+      recipeData.description || '',
+      'to-set-on-the-backend',
+      recipeData.imageUrl || '',
+      [],
+    );
 
     this.recipeItemService.addRecipe(newRecipe).subscribe({
       next: () => this.handleSuccess('Recipe created successfully'),
@@ -181,10 +181,14 @@ export class ManageRecipe {
     const currentRecipe = this.recipe();
     if (!currentRecipe) return;
 
-    const updatedRecipe: Recipe = {
-      ...currentRecipe,
-      ...recipeData,
-    };
+    const updatedRecipe = new Recipe(
+      currentRecipe.id,
+      recipeData.title || currentRecipe.title,
+      recipeData.description || currentRecipe.description,
+      currentRecipe.owner,
+      recipeData.imageUrl !== undefined ? recipeData.imageUrl : currentRecipe.imageUrl,
+      currentRecipe.ingredients,
+    );
 
     this.recipeItemService.editRecipe(updatedRecipe).subscribe({
       next: () => this.handleSuccess('Recipe updated successfully'),
