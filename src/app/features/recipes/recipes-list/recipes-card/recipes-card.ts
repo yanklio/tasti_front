@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { Recipe } from '../../recipe.model';
+import { Recipe, RecipeBrief } from '../../recipe.model';
 import { RECIPES_ROUTES } from '../../constants';
 import { GLOBAL_ROUTES } from '../../../../constants';
 import { UsernamePipe } from '../../../../core/pipes/username-pipe';
@@ -16,7 +16,7 @@ import { UsernamePipe } from '../../../../core/pipes/username-pipe';
   styleUrl: './recipes-card.css',
 })
 export class RecipesCard {
-  recipe = input.required<Recipe>();
+  recipe = input.required<RecipeBrief>();
   private router = inject(Router);
 
   onViewDetails() {
