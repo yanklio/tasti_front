@@ -2,7 +2,7 @@ interface BackendRecipeBrief {
   id: number;
   title: string;
   description: string;
-  image_url?: string;
+  image_download_url?: string;
   owner: string;
 }
 
@@ -13,7 +13,14 @@ class RecipeBrief {
   imageUrl?: string;
   owner: string;
 
-  constructor(id: number, title: string, description: string, owner: string, imageUrl?: string) {
+  constructor(
+    id: number,
+    title: string,
+    description: string,
+    owner: string,
+    imageUrl?: string,
+    imageBucketKey?: string,
+  ) {
     this.id = id;
     this.title = title;
     this.description = description;
@@ -27,7 +34,7 @@ class RecipeBrief {
       backendRecipe.title,
       backendRecipe.description,
       backendRecipe.owner,
-      backendRecipe.image_url,
+      backendRecipe.image_download_url,
     );
   }
 
@@ -36,7 +43,6 @@ class RecipeBrief {
       id: this.id,
       title: this.title,
       description: this.description,
-      image_url: this.imageUrl,
       owner: this.owner,
     };
   }
@@ -67,7 +73,7 @@ class Recipe extends RecipeBrief {
       backendRecipe.title,
       backendRecipe.description,
       backendRecipe.owner,
-      backendRecipe.image_url,
+      backendRecipe.image_download_url,
       backendRecipe.ingredients,
     );
   }
@@ -77,7 +83,6 @@ class Recipe extends RecipeBrief {
       id: this.id,
       title: this.title,
       description: this.description,
-      image_url: this.imageUrl,
       owner: this.owner,
       ingredients: this.ingredients,
     };

@@ -12,7 +12,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 export class ImageUpload {
   @Input() imageSrc: string | null = null;
   @Input() expanded = true;
-  @Output() imageSrcChange = new EventEmitter<string | null>();
+  @Output() imageFileChange = new EventEmitter<File | null>();
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
@@ -41,13 +41,13 @@ export class ImageUpload {
     if (file?.type.startsWith('image/')) {
       const imageUrl = URL.createObjectURL(file);
       this.imageSrc = imageUrl;
-      this.imageSrcChange.emit(imageUrl);
+      this.imageFileChange.emit(file);
     }
   }
 
   removeImage() {
     this.imageSrc = null;
-    this.imageSrcChange.emit(null);
+    this.imageFileChange.emit(null);
   }
 
   triggerFileInput() {

@@ -46,6 +46,7 @@ export class ManageRecipe {
   readonly mode = signal<ManageRecipeMode>('create');
   readonly recipeForm: FormGroup;
   readonly imageSrc = signal<string | null>(null);
+  readonly selectedFile = signal<File | null>(null);
 
   readonly recipe = this.recipeItemService.currentRecipe;
   readonly loading = this.recipeItemService.loading;
@@ -84,9 +85,15 @@ export class ManageRecipe {
     this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
   }
 
-  onImageSrcChange(imageSrc: string | null): void {
-    this.imageSrc.set(imageSrc);
-    this.recipeForm.patchValue({ imageUrl: imageSrc || '' });
+  onImageFileChange(file: File | null): void {
+    this.selectedFile.set(file);
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      this.imageSrc.set(imageUrl);
+    } else {
+      this.imageSrc.set(null);
+    }
+    this.recipeForm.patchValue({ imageUrl: this.imageSrc() || '' });
   }
 
   private createForm(): FormGroup {
@@ -157,7 +164,6 @@ export class ManageRecipe {
     return {
       title: formValue.title,
       description: formValue.description,
-      imageUrl: formValue.imageUrl || '',
     };
   }
 
@@ -167,11 +173,10 @@ export class ManageRecipe {
       recipeData.title || '',
       recipeData.description || '',
       'to-set-on-the-backend',
-      recipeData.imageUrl || '',
-      [],
+      '',
     );
 
-    this.recipeItemService.addRecipe(newRecipe).subscribe({
+    this.recipeItemService.addRecipe(newRecipe, this.selectedFile()).subscribe({
       next: () => this.handleSuccess('Recipe created successfully'),
       error: (error) => this.handleError('Failed to create recipe', error),
     });
@@ -186,11 +191,11 @@ export class ManageRecipe {
       recipeData.title || currentRecipe.title,
       recipeData.description || currentRecipe.description,
       currentRecipe.owner,
-      recipeData.imageUrl !== undefined ? recipeData.imageUrl : currentRecipe.imageUrl,
+      currentRecipe.imageUrl,
       currentRecipe.ingredients,
     );
 
-    this.recipeItemService.editRecipe(updatedRecipe).subscribe({
+    this.recipeItemService.editRecipe(updatedRecipe, this.selectedFile()).subscribe({
       next: () => this.handleSuccess('Recipe updated successfully'),
       error: (error) => this.handleError('Failed to update recipe', error),
     });
