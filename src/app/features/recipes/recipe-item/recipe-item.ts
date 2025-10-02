@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RecipeItemService } from '../services/recipe-item.service';
 import { LoaderComponent } from '../../../shared/components/loader/loader';
+import { BackHeader } from '../../../shared/components/back-header/back-header';
 import { Subscription } from 'rxjs';
 import { RECIPES_ROUTES } from '../constants';
 import { GLOBAL_ROUTES } from '../../../constants';
@@ -12,7 +13,14 @@ import { GLOBAL_ROUTES } from '../../../constants';
 @Component({
   selector: 'app-recipe-item',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatIconModule, RouterModule, LoaderComponent],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    RouterModule,
+    LoaderComponent,
+    BackHeader,
+  ],
   templateUrl: './recipe-item.html',
   styleUrl: './recipe-item.css',
 })

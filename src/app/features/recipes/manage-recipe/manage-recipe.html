@@ -3,12 +3,7 @@
 } @else {
 
 <div class="manage-recipe-container">
-  <div class="manage-recipe-header">
-    <button mat-icon-button class="back-button" (click)="onCancel()" aria-label="Go back">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <p>{{ headerText }}</p>
-  </div>
+  <app-back-header [title]="headerText" (backClick)="onCancel()"></app-back-header>
 
   <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" class="manage-recipe-form">
     <app-image-upload [imageSrc]="imageSrc()" (imageFileChange)="onImageFileChange($event)">
@@ -36,7 +31,7 @@
       color="primary"
       type="submit"
       [disabled]="!recipeForm.valid"
-      class="manage-recipe-button"
+      class="fab-fixed-bottom-right"
     >
       <mat-icon>{{ buttonIcon }}</mat-icon>
       {{ buttonText }}

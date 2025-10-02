@@ -13,6 +13,7 @@ import { ImageUpload } from '../../../shared/components/image-upload/image-uploa
 import { RecipeItemService } from '../services/recipe-item.service';
 import { RECIPES_ROUTES } from '../constants';
 import { LoaderComponent } from '../../../shared/components/loader/loader';
+import { BackHeader } from '../../../shared/components/back-header/back-header';
 import { GLOBAL_ROUTES } from '../../../constants';
 
 type ManageRecipeMode = 'create' | 'edit';
@@ -30,6 +31,7 @@ type ManageRecipeMode = 'create' | 'edit';
     MatSnackBarModule,
     ImageUpload,
     LoaderComponent,
+    BackHeader,
   ],
   templateUrl: './manage-recipe.html',
   styleUrl: './manage-recipe.css',

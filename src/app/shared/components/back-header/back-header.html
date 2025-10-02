@@ -1,0 +1,6 @@
+<div class="back-header" [style.background-color]="backgroundColor()" [style.padding]="padding()">
+  <button mat-icon-button class="back-button" (click)="backClick.emit()" aria-label="Go back">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <p>{{ title() }}</p>
+</div>

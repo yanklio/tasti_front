@@ -1,0 +1,16 @@
+.back-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 18px;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 60px;
+}
+
+.back-button {
+  background-color: var(--mat-sys-surface-variant);
+  border-radius: 50%;
+}

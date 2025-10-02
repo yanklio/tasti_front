@@ -52,3 +52,11 @@ body {
   width: auto;
   background: auto;
 }
+
+/* Global styles for fab buttons */
+button.fab-fixed-bottom-right {
+  position: fixed;
+  bottom: 16px;
+  right: 24px;
+  z-index: 1000;
+}
