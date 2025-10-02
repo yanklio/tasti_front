@@ -1,4 +1,5 @@
 import {
+  HttpContextToken,
   HttpErrorResponse,
   HttpEvent,
   HttpHandlerFn,
@@ -24,6 +25,8 @@ import { SessionService } from '../services/session.service';
 let isRefreshing = false;
 let refreshTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
+export const SKIP_AUTH = new HttpContextToken<boolean>(() => false);
+
 export const AuthInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
@@ -32,7 +35,7 @@ export const AuthInterceptor: HttpInterceptorFn = (
   const sessionService = inject(SessionService);
   const authService = inject(AuthService);
 
-  if (isAuthRequest(req)) {
+  if (req.context.get(SKIP_AUTH)) {
     return next(req);
   }
 
@@ -55,10 +58,6 @@ function addTokenToRequest(request: HttpRequest<any>, token: string): HttpReques
   return request.clone({
     headers: request.headers.set('Authorization', `Bearer ${token}`),
   });
-}
-
-function isAuthRequest(request: HttpRequest<any>): boolean {
-  return request.url.includes('/auth');
 }
 
 function isRefreshRequest(request: HttpRequest<any>): boolean {

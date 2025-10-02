@@ -1,9 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BehaviorSubject, catchError, finalize, Observable, tap, throwError } from 'rxjs';
 import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
 import { AUTH_API_ENDPOINTS } from '../constants';
+import { SKIP_AUTH } from '../interceptors/auth.interceptor';
+
+const AuthHttpContext = new HttpContext().set(SKIP_AUTH, true);
 
 @Injectable({
   providedIn: 'root',
@@ -37,19 +40,27 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.authUrl + AUTH_API_ENDPOINTS.LOGIN, credentials).pipe(
-      tap((response) => {
-        this.setAccessToken(response.access);
-      }),
-    );
+    return this.http
+      .post<AuthResponse>(this.authUrl + AUTH_API_ENDPOINTS.LOGIN, credentials, {
+        context: AuthHttpContext,
+      })
+      .pipe(
+        tap((response) => {
+          this.setAccessToken(response.access);
+        }),
+      );
   }
 
   register(credentials: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.authUrl + AUTH_API_ENDPOINTS.REGISTER, credentials).pipe(
-      tap((response) => {
-        this.setAccessToken(response.access);
-      }),
-    );
+    return this.http
+      .post<AuthResponse>(this.authUrl + AUTH_API_ENDPOINTS.REGISTER, credentials, {
+        context: AuthHttpContext,
+      })
+      .pipe(
+        tap((response) => {
+          this.setAccessToken(response.access);
+        }),
+      );
   }
 
   refreshAccessToken(): Observable<AuthResponse> {

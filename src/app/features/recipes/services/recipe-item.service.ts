@@ -2,8 +2,11 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { RECIPES_API_ENDPOINTS } from '../constants';
 import { BackendRecipe, Recipe } from '../recipe.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, tap, throwError, map, switchMap, of, from } from 'rxjs';
+import { SKIP_AUTH } from '../../../core/interceptors/auth.interceptor';
+
+const BucketHttpContext = new HttpContext().set(SKIP_AUTH, true);
 
 interface PresignedUrlResponse {
   presigned_url: string;
@@ -210,23 +213,18 @@ export class RecipeItemService {
   }
 
   private uploadImageToBucket(presignedUrl: string, file: File): Observable<void> {
-    return from(
-      fetch(presignedUrl, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'Content-Type': 'image/jpeg',
-        },
-      }).then((response) => {
-        if (!response.ok) {
-          throw new Error(`Upload failed with status ${response.status}`);
-        }
-      }),
-    ).pipe(
-      catchError((error) =>
-        throwError(() => new Error('Failed to upload image: ' + error.message)),
-      ),
-    );
+    return this.http
+      .put(presignedUrl, file, {
+        headers: new HttpHeaders({}),
+        responseType: 'text',
+        context: BucketHttpContext,
+      })
+      .pipe(
+        map(() => void 0),
+        catchError((error) =>
+          throwError(() => new Error('Failed to upload image: ' + error.message)),
+        ),
+      );
   }
 
   private updateRecipeImage(recipeId: number, imageBucketKey: string): Observable<any> {

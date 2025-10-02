@@ -56,7 +56,9 @@ export default class RecipeListService {
         (response): PaginatedResponse<RecipeBrief> => ({
           ...response,
           results:
-            response.results?.map((backendRecipe) => RecipeBrief.fromBackend(backendRecipe)) || [],
+            response.results?.map((backendRecipe: BackendRecipeBrief) =>
+              RecipeBrief.fromBackend(backendRecipe),
+            ) || [],
         }),
       ),
       tap((response) => {
