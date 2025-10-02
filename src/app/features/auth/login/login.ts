@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LogoComponent } from '../../../shared/components/logo/logo';
+import { BadgeComponent } from '../../../shared/components/badge/badge';
 import { AuthService as sessionService } from '../../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginRequest } from '../../../core/models/auth.model';
@@ -24,6 +25,7 @@ import { AUTH_API_ENDPOINTS } from '../../../core/constants';
     MatButtonModule,
     MatIconModule,
     LogoComponent,
+    BadgeComponent,
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -34,7 +36,7 @@ export class Login {
 
   private sessionService = inject(SessionService);
 
-  registerLink = "/" + AUTH_API_ENDPOINTS.BASE + AUTH_API_ENDPOINTS.REGISTER;
+  registerLink = '/' + AUTH_API_ENDPOINTS.BASE + AUTH_API_ENDPOINTS.REGISTER;
 
   loginForm: FormGroup;
   hidePassword = true;

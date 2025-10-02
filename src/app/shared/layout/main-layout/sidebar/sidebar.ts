@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../../../core/services/theme.service';
 import { LogoComponent } from '../../../components/logo/logo';
+import { BadgeComponent } from '../../../components/badge/badge';
 import { SessionService } from '../../../../core/services/session.service';
 import { AUTH_API_ENDPOINTS } from '../../../../core/constants';
 
@@ -19,6 +20,7 @@ import { AUTH_API_ENDPOINTS } from '../../../../core/constants';
     MatTooltipModule,
     MatMenuModule,
     LogoComponent,
+    BadgeComponent,
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',

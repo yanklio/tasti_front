@@ -1,0 +1,11 @@
+.badge.mat-mdc-standard-chip {
+  background-color: var(--mat-fab-container-color, var(--mat-sys-primary-container));
+}
+
+.badge.mat-mdc-standard-chip ::ng-deep .mdc-evolution-chip__action--primary::before {
+  border: 0;
+}
+
+.badge.mat-mdc-standard-chip ::ng-deep .mdc-evolution-chip__text-label {
+  color: var(--mat-fab-foreground-color, var(--mat-sys-on-primary-container, inherit));
+}
