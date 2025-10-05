@@ -8,7 +8,6 @@ import { LoaderComponent } from '../../../shared/components/loader/loader';
 import { BackHeader } from '../../../shared/components/back-header/back-header';
 import { Subscription } from 'rxjs';
 import { RECIPES_ROUTES } from '../constants';
-import { GLOBAL_ROUTES } from '../../../constants';
 
 @Component({
   selector: 'app-recipe-item',
@@ -34,6 +33,8 @@ export class RecipeItem {
   readonly recipe = this.recipeService.currentRecipe;
   readonly loading = this.recipeService.loading;
   readonly error = this.recipeService.error;
+
+  readonly isOwner = this.recipeService.isOwner;
 
   constructor() {
     const id = Number(this.route.snapshot.paramMap.get('id'));

@@ -1,10 +1,11 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { RECIPES_API_ENDPOINTS } from '../constants';
 import { BackendRecipe, Recipe } from '../recipe.model';
 import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, tap, throwError, map, switchMap, of, from } from 'rxjs';
 import { SKIP_AUTH } from '../../../core/interceptors/auth.interceptor';
+import { UserService } from '../../../core/services/user.service';
 
 const BucketHttpContext = new HttpContext().set(SKIP_AUTH, true);
 
@@ -30,6 +31,7 @@ interface CreateRecipeResponse extends BackendRecipe {
 @Injectable()
 export class RecipeItemService {
   private http = inject(HttpClient);
+  private user = inject(UserService);
 
   private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE + '/';
 
@@ -46,6 +48,12 @@ export class RecipeItemService {
     loading: this.loading,
     error: this.error,
   };
+
+  readonly isOwner = computed(() => {
+    const recipe = this.currentRecipe();
+    const user = this.user;
+    return recipe && user && recipe.owner === user.username();
+  });
 
   clearCurrentRecipe() {
     this._currentRecipe.set(null);

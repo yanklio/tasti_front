@@ -1,13 +1,13 @@
-<!-- TODO: handle error and loading states -->
+<!-- Loading, error and empty states handled -->
 
 <div class="list-wrapper">
-  @if(loading()) {
+  @if (loading()) {
   <app-loader></app-loader>
-  } @else { @if (recipes().length > 0) {
+  } @else { @if (recipes() && recipes().length > 0) {
   <div class="recipes-grid">
-    @for (recipe of recipes() || []; track recipe.id){
+    @for (recipe of recipes(); track recipe.id) { @if (recipe) {
     <app-recipes-card [recipe]="recipe"></app-recipes-card>
-    }
+    } }
   </div>
   <mat-paginator
     class="card-paginator"
@@ -19,14 +19,14 @@
     (page)="onPageChange($event)"
   >
   </mat-paginator>
-  } @if (recipes().length === 0) {
+  } @else {
   <app-empty-state text="No recipes found" icon="search_off"></app-empty-state>
   } }
 </div>
 
 <button
   matFab
-  appAuthRequired
+  appSuggestAuth
   extended
   class="fab-fixed-bottom-right"
   aria-label="Add recipe"

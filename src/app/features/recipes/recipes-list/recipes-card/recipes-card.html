@@ -6,18 +6,20 @@
     <div class="image-placeholder">{{ recipe().title }}</div>
     }
     <mat-card-header>
-      <mat-card-title>{{recipe().title}}</mat-card-title>
-      <mat-card-subtitle>{{recipe().owner | username }}</mat-card-subtitle>
+      <mat-card-title>{{ recipe().title }}</mat-card-title>
+      <mat-card-subtitle>{{ recipe().owner | username }}</mat-card-subtitle>
       <!--<div mat-card-avatar class="example-header-image"></div>-->
     </mat-card-header>
     <mat-card-content>
-      <p>{{recipe().description}}</p>
+      <p>{{ recipe().description }}</p>
     </mat-card-content>
   </div>
   <mat-card-actions (click)="$event.stopPropagation()">
     <button mat-button class="view-button" (click)="onViewDetails()">
       View <mat-icon>arrow_forward</mat-icon>
     </button>
+    @if (isOwner()) {
     <button mat-button (click)="onEdit()"><mat-icon>edit</mat-icon> Edit</button>
+    }
   </mat-card-actions>
 </mat-card>

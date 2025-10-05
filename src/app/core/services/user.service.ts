@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../models/user.model';
+import { OwnedObject } from '../interfaces/owner';
 
 @Injectable({
   providedIn: 'root',
@@ -99,5 +100,11 @@ export class UserService {
   private clearAllUserData(): void {
     this._user.set(null);
     this.clearUserCache();
+  }
+
+  isOwner(object?: OwnedObject) {
+    if (!this.username() || !object) return false;
+
+    return object.owner === this.username();
   }
 }

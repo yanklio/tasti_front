@@ -8,6 +8,7 @@ import { RecipesCard } from './recipes-card/recipes-card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { LoaderComponent } from '../../../shared/components/loader/loader';
 import { EmptyState } from '../../../shared/components/empty-state/empty-state';
+import { SuggestAuth } from '../../../core/directives/suggest-auth';
 
 @Component({
   selector: 'app-recipes-list',
@@ -20,6 +21,7 @@ import { EmptyState } from '../../../shared/components/empty-state/empty-state';
     LoaderComponent,
     MatPaginatorModule,
     EmptyState,
+    SuggestAuth,
   ],
 })
 export class RecipesList {

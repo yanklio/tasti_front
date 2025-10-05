@@ -3,10 +3,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionService } from '../services/session.service';
 
 @Directive({
-  selector: '[appAuthRequired]',
+  selector: '[appSuggestAuth]',
   standalone: true,
 })
-export class AuthRequired {
+export class SuggestAuth {
   constructor() {
     const snackBar = inject(MatSnackBar);
     const sessionService = inject(SessionService);

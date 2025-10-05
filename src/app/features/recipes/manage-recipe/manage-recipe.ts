@@ -14,7 +14,6 @@ import { RecipeItemService } from '../services/recipe-item.service';
 import { RECIPES_ROUTES } from '../constants';
 import { LoaderComponent } from '../../../shared/components/loader/loader';
 import { BackHeader } from '../../../shared/components/back-header/back-header';
-import { GLOBAL_ROUTES } from '../../../constants';
 
 type ManageRecipeMode = 'create' | 'edit';
 

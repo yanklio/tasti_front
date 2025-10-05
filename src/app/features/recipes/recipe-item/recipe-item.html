@@ -9,7 +9,7 @@
     [padding]="'0 16px'"
   ></app-back-header>
 
-  @if (recipe() && !loading()) {
+  @if (recipe() && !loading() && isOwner()) {
   <button
     mat-fab
     extended

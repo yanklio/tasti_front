@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, inject, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { Recipe, RecipeBrief } from '../../recipe.model';
+import { RecipeBrief } from '../../recipe.model';
 import { RECIPES_ROUTES } from '../../constants';
 import { GLOBAL_ROUTES } from '../../../../constants';
 import { UsernamePipe } from '../../../../core/pipes/username-pipe';
+import { UserService } from '../../../../core/services/user.service';
 
 @Component({
   selector: 'app-recipes-card',
@@ -16,8 +17,11 @@ import { UsernamePipe } from '../../../../core/pipes/username-pipe';
   styleUrl: './recipes-card.css',
 })
 export class RecipesCard {
-  recipe = input.required<RecipeBrief>();
-  private router = inject(Router);
+  private readonly router = inject(Router);
+  private readonly user = inject(UserService);
+
+  readonly recipe = input.required<RecipeBrief>();
+  readonly isOwner = computed(() => this.user.isOwner(this.recipe()));
 
   onViewDetails() {
     this.router.navigate([GLOBAL_ROUTES.RECIPES, this.recipe().id]);

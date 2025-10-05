@@ -57,9 +57,9 @@ export default class RecipeListService {
           ...response,
           results:
             response.results?.map((backendRecipe: BackendRecipeBrief) =>
-              RecipeBrief.fromBackend(backendRecipe),
+              RecipeBrief.fromBackend(backendRecipe)
             ) || [],
-        }),
+        })
       ),
       tap((response) => {
         this._recipes.set(response.results);
@@ -81,7 +81,7 @@ export default class RecipeListService {
       }),
       finalize(() => {
         this._loading.set(false);
-      }),
+      })
     );
   }
 }
