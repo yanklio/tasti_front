@@ -14,7 +14,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .bottom-wrapper {
@@ -22,7 +22,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   width: 100%;
 }
 
@@ -42,9 +42,7 @@
 }
 
 .auth-button {
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
   width: 56px;
   height: 56px;
   display: flex;

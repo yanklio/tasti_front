@@ -1,7 +1,13 @@
 import { Routes } from '@angular/router';
 import { GLOBAL_ROUTES } from './constants';
+import { Settings } from './features/settings/settings';
 
 export const routes: Routes = [
+  {
+    path: GLOBAL_ROUTES.SETTINGS,
+    component: Settings,
+    title: 'Settings',
+  },
   {
     path: GLOBAL_ROUTES.RECIPES,
     loadChildren: () => import('./features/recipes/recipes.routes').then((m) => m.recipesRoutes),

@@ -9,37 +9,17 @@
     <!-- More Options Button -->
     <button
       matIconButton
-      matTooltip="More options"
+      matTooltip="Settings"
       matTooltipPosition="after"
-      aria-label="More options"
+      aria-label="Settings"
       class="bottom-icon"
-      [matMenuTriggerFor]="moreMenu"
+      [routerLink]="settingsRoute"
     >
-      <mat-icon>more_horiz</mat-icon>
+      <mat-icon>settings</mat-icon>
     </button>
 
     <!-- More Options Menu -->
-    <mat-menu #moreMenu="matMenu" yPosition="above" xPosition="before" [overlapTrigger]="false">
-      <!-- Theme Toggle Group -->
-      <div class="theme-toggle-container" (click)="$event.stopPropagation()">
-        <mat-button-toggle-group
-          [value]="themeService.theme()"
-          (change)="onThemeChange($event)"
-          class="theme-toggle-group"
-        >
-          <mat-button-toggle value="light">
-            <mat-icon>light_mode</mat-icon>
-          </mat-button-toggle>
-          <mat-button-toggle value="dark">
-            <mat-icon>dark_mode</mat-icon>
-          </mat-button-toggle>
-          <mat-button-toggle value="system">
-            <mat-icon>computer</mat-icon>
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-
-      <!-- GitHub Link -->
+    <!-- <mat-menu #moreMenu="matMenu" yPosition="above" xPosition="before" [overlapTrigger]="false">
       <a
         mat-menu-item
         href="https://github.com/yarlaw/tasti_front"
@@ -53,7 +33,7 @@
         </svg>
         <span>GitHub Repository</span>
       </a>
-    </mat-menu>
+    </mat-menu> -->
 
     <!-- Authentication Status Button -->
     <button
