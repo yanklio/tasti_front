@@ -5,8 +5,7 @@
   height: 100%;
   position: relative;
   cursor: pointer;
-  transition:
-    transform var(--mat-expansion-panel-container-animation-duration, 0.2s),
+  transition: transform var(--mat-expansion-panel-container-animation-duration, 0.2s),
     box-shadow var(--mat-expansion-panel-container-animation-duration, 0.2s);
 }
 
@@ -54,7 +53,7 @@
 mat-card-actions {
   display: flex;
   justify-content: space-between;
-  padding: 8px 16px;
+  padding: 8px 8px;
   border-top: 1px solid var(--mat-sys-inverse-primary);
 }
 

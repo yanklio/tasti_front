@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { RecipeBrief } from '../../recipe.model';
 import { RECIPES_ROUTES } from '../../constants';
@@ -13,7 +14,14 @@ import { RecipeItemService } from '../../services/recipe-item.service';
 
 @Component({
   selector: 'app-recipes-card',
-  imports: [MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, UsernamePipe],
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatSnackBarModule,
+    UsernamePipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './recipes-card.html',
   styleUrl: './recipes-card.css',
@@ -22,6 +30,7 @@ export class RecipesCard {
   private readonly router = inject(Router);
   private readonly user = inject(UserService);
   private readonly recipeItemService = inject(RecipeItemService);
+  private readonly snackBar = inject(MatSnackBar);
 
   readonly recipe = input.required<RecipeBrief>();
   readonly isOwner = computed(() => this.user.isOwner(this.recipe()));
@@ -32,6 +41,21 @@ export class RecipesCard {
 
   onEdit() {
     this.router.navigate([GLOBAL_ROUTES.RECIPES, RECIPES_ROUTES.EDIT_RECIPE, this.recipe().id]);
+  }
+
+  onCopyLink() {
+    const url =
+      window.location.origin +
+      this.router.createUrlTree([GLOBAL_ROUTES.RECIPES, this.recipe().id]).toString();
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        this.snackBar.open('Link successfully copied', 'Dismiss', { duration: 3000 });
+      })
+      .catch((err) => {
+        console.error('Failed to copy link:', err);
+        this.snackBar.open('Failed to copy link', 'Dismiss', { duration: 3000 });
+      });
   }
 
   onDelete() {

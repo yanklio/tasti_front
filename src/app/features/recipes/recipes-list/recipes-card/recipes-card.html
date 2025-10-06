@@ -18,11 +18,15 @@
     <button mat-button class="view-button" (click)="onViewDetails()">
       View <mat-icon>arrow_forward</mat-icon>
     </button>
-    @if (isOwner()) {
     <button mat-icon-button [matMenuTriggerFor]="optionsMenu" aria-label="More options">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #optionsMenu="matMenu">
+      <button mat-menu-item (click)="onCopyLink()">
+        <mat-icon>link</mat-icon>
+        <span>Copy Link</span>
+      </button>
+      @if (isOwner()) {
       <button mat-menu-item (click)="onEdit()">
         <mat-icon>edit</mat-icon>
         <span>Edit</span>
@@ -31,7 +35,7 @@
         <mat-icon>delete</mat-icon>
         <span>Delete</span>
       </button>
+      }
     </mat-menu>
-    }
   </mat-card-actions>
 </mat-card>
