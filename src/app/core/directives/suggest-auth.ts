@@ -1,6 +1,7 @@
 import { DestroyRef, Directive, ElementRef, inject } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { SessionService } from '../services/session.service';
+import { SuggestAuthDialogComponent } from '../../shared/components/suggest-auth-dialog/suggest-auth-dialog';
 
 @Directive({
   selector: '[appSuggestAuth]',
@@ -8,7 +9,7 @@ import { SessionService } from '../services/session.service';
 })
 export class SuggestAuth {
   constructor() {
-    const snackBar = inject(MatSnackBar);
+    const dialog = inject(MatDialog);
     const sessionService = inject(SessionService);
     const elementRef = inject(ElementRef<HTMLElement>);
     const destroyRef = inject(DestroyRef);
@@ -18,9 +19,7 @@ export class SuggestAuth {
         event.stopImmediatePropagation();
         event.preventDefault();
         event.stopPropagation();
-        snackBar.open('This action is only for authenticated users', 'Close', {
-          duration: 3000,
-        });
+        dialog.open(SuggestAuthDialogComponent);
       }
     };
 

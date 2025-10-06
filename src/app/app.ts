@@ -4,10 +4,11 @@ import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './core/services/theme.service';
 import { FaviconService } from './core/services/favicon.service';
 import { SessionService } from './core/services/session.service';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatToolbarModule],
+  imports: [RouterOutlet, MatToolbarModule, MatDialogModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -22,7 +23,7 @@ export class App {
   constructor() {
     this.favicon.setFaviconByTheme(
       'assets/favicons/favicon-light.ico',
-      'assets/favicons/favicon-dark.ico',
+      'assets/favicons/favicon-dark.ico'
     );
   }
 }
