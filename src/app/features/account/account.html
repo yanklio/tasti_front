@@ -1,0 +1,12 @@
+<app-main-layout>
+  <app-back-header title="Account" (backClick)="onBackClick()"></app-back-header>
+  <div class="spacer"></div>
+
+  <p class="header">Account</p>
+  <mat-card class="full-width-card" appearance="outlined">
+    <div class="setting-row">
+      <span class="setting-name">Username</span>
+      <span>{{ user()?.username }}</span>
+    </div>
+  </mat-card>
+</app-main-layout>

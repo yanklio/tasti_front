@@ -14,7 +14,7 @@
 }
 
 .recipe-card {
-  margin: 16px;
+  margin-top: 16px;
   border-radius: var(--mat-card-shape);
   overflow: hidden;
 }

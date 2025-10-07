@@ -32,8 +32,7 @@ export class Sidebar {
 
   onAuthButtonClick() {
     if (this.sessionService.isAuthenticated()) {
-      // TODO: Implement account page navigation
-      // this.router.navigate(['/account']);
+      this.router.navigate(['/account']);
     } else {
       this.router.navigate([AUTH_API_ENDPOINTS.BASE + AUTH_API_ENDPOINTS.LOGIN]);
     }
