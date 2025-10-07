@@ -26,11 +26,13 @@
   <mat-card appearance="outlined" class="recipe-card">
     @if (recipe()?.imageUrl) {
     <img mat-card-image [src]="recipe()?.imageUrl" [alt]="recipe()?.title" />
+    } @else {
+    <div class="image-placeholder">{{ recipe()?.title }}</div>
     }
 
     <mat-card-content>
       <h2 class="recipe-title">{{ recipe()?.title }}</h2>
-      <p class="recipe-owner">Created by: {{ recipe()?.owner }}</p>
+      <p class="recipe-owner">Created by: {{ recipe()!.owner | username }}</p>
 
       <p class="recipe-description">{{ recipe()?.description }}</p>
 

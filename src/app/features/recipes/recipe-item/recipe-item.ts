@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RecipeItemService } from '../services/recipe-item.service';
 import { LoaderComponent } from '../../../shared/components/loader/loader';
 import { BackHeader } from '../../../shared/components/back-header/back-header';
+import { UsernamePipe } from '../../../core/pipes/username-pipe';
 import { Subscription } from 'rxjs';
 import { RECIPES_ROUTES } from '../constants';
 
@@ -19,6 +20,7 @@ import { RECIPES_ROUTES } from '../constants';
     RouterModule,
     LoaderComponent,
     BackHeader,
+    UsernamePipe,
   ],
   templateUrl: './recipe-item.html',
   styleUrl: './recipe-item.css',

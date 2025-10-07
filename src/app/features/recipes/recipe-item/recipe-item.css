@@ -15,7 +15,7 @@
 
 .recipe-card {
   margin-top: 16px;
-  border-radius: var(--mat-card-shape);
+  border-radius: 12px;
   overflow: hidden;
 }
 
@@ -51,6 +51,30 @@ mat-card-content {
 
 img {
   width: 100%;
-  max-height: 300px;
+  height: 300px;
+  min-height: 300px;
   object-fit: cover;
+  object-position: center;
+  border-radius: 12px 12px 0 0;
+  display: block;
+}
+
+.image-placeholder {
+  height: 300px;
+  width: 100%;
+  background-color: var(--mat-sys-surface-variant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px 12px 0 0;
+  font-size: 18px;
+  color: var(--mat-sys-on-surface-variant);
+  font-weight: 500;
+}
+
+.fab-fixed-bottom-right {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
 }
