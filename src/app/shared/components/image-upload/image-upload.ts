@@ -45,7 +45,9 @@ export class ImageUpload {
     }
   }
 
-  removeImage() {
+  removeImage(event: Event) {
+    event.preventDefault(); // Prevent form submission
+    event.stopPropagation();
     this.imageSrc = null;
     this.imageFileChange.emit(null);
   }

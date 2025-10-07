@@ -25,7 +25,7 @@
     style="display: none"
   />
   <div class="image-actions">
-    <button mat-flat-button color="warn" (click)="removeImage()" [disabled]="!imageSrc">
+    <button mat-flat-button color="warn" (click)="removeImage($event)" [disabled]="!imageSrc">
       <mat-icon>delete</mat-icon>
       Remove
     </button>
