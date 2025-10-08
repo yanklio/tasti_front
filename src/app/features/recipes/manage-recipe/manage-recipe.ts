@@ -124,14 +124,18 @@ export class ManageRecipe {
     this.recipeId = +this.route.snapshot.params['id'];
 
     if (this.recipeId) {
-      this.recipeItemService.loadRecipeById(this.recipeId).subscribe({
-        next: (recipe) => {
-          this.updateFormWithRecipe(recipe);
-        },
-        error: (error) => {
-          this.handleServiceError(error);
-        },
-      });
+      // Check if the current recipe is already loaded by owner guard
+      const currentRecipe = this.recipeItemService.recipe();
+      if (!currentRecipe || currentRecipe.id !== this.recipeId) {
+        this.recipeItemService.loadRecipeById(this.recipeId).subscribe({
+          next: (recipe) => {
+            this.updateFormWithRecipe(recipe);
+          },
+          error: (error) => {
+            this.handleServiceError(error);
+          },
+        });
+      }
     }
   }
 

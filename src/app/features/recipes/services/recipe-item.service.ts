@@ -45,7 +45,9 @@ interface RecipeState {
   error: string | null;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class RecipeItemService {
   private http = inject(HttpClient);
   private user = inject(UserService);

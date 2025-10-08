@@ -9,6 +9,6 @@ import { RecipeItemService } from './services/recipe-item.service';
   imports: [MainLayout, RouterModule],
   templateUrl: './recipes.html',
   styleUrl: './recipes.css',
-  providers: [RecipeListService, RecipeItemService],
+  providers: [RecipeListService],
 })
 export class Recipes {}
