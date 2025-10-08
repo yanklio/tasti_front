@@ -49,7 +49,7 @@ export class ManageRecipe {
   readonly imageSrc = signal<string | null>(null);
   readonly selectedFile = signal<File | null>(null);
 
-  readonly recipe = this.recipeItemService.currentRecipe;
+  readonly recipe = this.recipeItemService.recipe;
   readonly loading = this.recipeItemService.loading;
   readonly error = this.recipeItemService.error;
 
@@ -132,8 +132,6 @@ export class ManageRecipe {
           this.handleServiceError(error);
         },
       });
-    } else {
-      this.handleInvalidId();
     }
   }
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../models/user.model';
-import { OwnedObject } from '../interfaces/owner';
+import { OwnedObject } from '../types/owner';
 
 @Injectable({
   providedIn: 'root',

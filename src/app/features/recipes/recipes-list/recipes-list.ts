@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,6 +14,7 @@ import { SuggestAuth } from '../../../core/directives/suggest-auth';
   selector: 'app-recipes-list',
   templateUrl: './recipes-list.html',
   styleUrl: './recipes-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     RecipesCard,
     MatButtonModule,
@@ -33,13 +34,13 @@ export class RecipesList {
   loading = this.recipeListService.loading;
   error = this.recipeListService.error;
 
-  pagination = this.recipeListService.paginationState;
+  pagination = this.recipeListService.pagination;
 
   constructor() {
     this.route.queryParams.subscribe((params) => {
       const current_page = +params['current_page'] || 1;
       const page_size = +params['page_size'] || 10;
-      this.recipeListService.loadRecipes({ page: current_page, pageSize: page_size }).subscribe();
+      this.recipeListService.getRecipes({ page: current_page, pageSize: page_size }).subscribe();
     });
   }
 

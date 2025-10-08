@@ -70,7 +70,7 @@ export class RecipesCard {
           (error) => {
             console.error('Failed to delete recipe:', error);
             // Optionally show a snackbar or alert
-          }
+          },
         )
         .subscribe();
     }

@@ -3,11 +3,20 @@ import { environment } from '../../../../environments/environment';
 import { RECIPES_API_ENDPOINTS } from '../constants';
 import { BackendRecipe, Recipe } from '../recipe.model';
 import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, tap, throwError, map, switchMap, of, from } from 'rxjs';
-import { SKIP_AUTH } from '../../../core/interceptors/auth.interceptor';
+import {
+  Observable,
+  catchError,
+  tap,
+  throwError,
+  map,
+  switchMap,
+  of,
+  from,
+  Subject,
+  finalize,
+} from 'rxjs';
+import { CrudRecipesOperation, RecipeBucketHttpContext } from './utils';
 import { UserService } from '../../../core/services/user.service';
-
-const BucketHttpContext = new HttpContext().set(SKIP_AUTH, true);
 
 interface PresignedUrlResponse {
   presigned_url: string;
@@ -23,63 +32,57 @@ interface CreateRecipeRequest {
   filename?: string;
 }
 
-interface CreateRecipeResponse extends BackendRecipe {
+type CreateBucketExtendedResponse<T extends object> = T & {
   presigned_upload_url?: string;
   image_upload_key?: string;
+};
+
+interface RecipeState {
+  recipe: Recipe | null;
+  loading: boolean;
+  error: string | null;
 }
 
 @Injectable()
 export class RecipeItemService {
   private http = inject(HttpClient);
   private user = inject(UserService);
-
   private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE + '/';
 
-  private _currentRecipe = signal<Recipe | null>(null);
-  private _loading = signal(false);
-  private _error = signal<string | null>(null);
+  private readonly operationNotifier = new Subject<CrudRecipesOperation>();
 
-  readonly currentRecipe = this._currentRecipe.asReadonly();
-  readonly loading = this._loading.asReadonly();
-  readonly error = this._error.asReadonly();
+  readonly operationNotifier$ = this.operationNotifier.asObservable();
 
-  readonly state = {
-    recipes: this.currentRecipe,
-    loading: this.loading,
-    error: this.error,
-  };
-
-  readonly isOwner = computed(() => {
-    const recipe = this.currentRecipe();
-    const user = this.user;
-    return recipe && user && recipe.owner === user.username();
+  readonly state = signal<RecipeState>({
+    recipe: null,
+    loading: false,
+    error: null,
   });
 
-  clearCurrentRecipe() {
-    this._currentRecipe.set(null);
-  }
+  recipe = computed(() => this.state().recipe);
+  loading = computed(() => this.state().loading);
+  error = computed(() => this.state().error);
 
   loadRecipeById(id: number): Observable<Recipe> {
-    this._loading.set(true);
-    this._error.set(null);
+    this.state.update((state) => ({ ...state, loading: true }));
 
     return this.http.get<BackendRecipe>(this.apiUrl + id + '/').pipe(
       map((backendRecipe) => Recipe.fromBackend(backendRecipe)),
       tap((recipe) => {
-        this._currentRecipe.set(recipe);
-        this._loading.set(false);
+        this.state.update((state) => ({ ...state, recipe }));
       }),
       catchError((error) => {
-        this._error.set(error.message);
-        this._loading.set(false);
+        this.state.update((state) => ({ ...state, error }));
         return throwError(() => error);
+      }),
+      finalize(() => {
+        this.state.update((state) => ({ ...state, loading: false }));
       }),
     );
   }
 
   addRecipe(recipe: Recipe, file?: File | null): Observable<Recipe> {
-    this._loading.set(true);
-    this._error.set(null);
+    this.state.update((state) => ({ ...state, loading: true }));
 
     const request: CreateRecipeRequest = {
       title: recipe.title,
@@ -91,17 +94,19 @@ export class RecipeItemService {
       request.filename = file.name;
     }
 
-    return this.http.post<CreateRecipeResponse>(this.apiUrl, request).pipe(
+    return this.http.post<CreateBucketExtendedResponse<Recipe>>(this.apiUrl, request).pipe(
       switchMap((response) => this.handleImageForNewRecipe(response, file)),
       map((backendRecipe) => Recipe.fromBackend(backendRecipe)),
-      tap((recipe) => {
-        this._currentRecipe.set(recipe);
-        this._loading.set(false);
+      tap((newRecipe) => {
+        this.state.update((state) => ({ ...state, recipe: newRecipe }));
+        this.operationNotifier.next({ type: 'create', payload: newRecipe });
       }),
       catchError((error) => {
-        this._error.set(error.message);
-        this._loading.set(false);
+        this.state.update((state) => ({ ...state, error }));
         return throwError(() => error);
+      }),
+      finalize(() => {
+        this.state.update((state) => ({ ...state, loading: false }));
       }),
     );
   }
@@ -112,8 +117,7 @@ export class RecipeItemService {
     onSuccess?: () => void,
     onError?: (error: any) => void,
   ): Observable<Recipe> {
-    this._loading.set(true);
-    this._error.set(null);
+    this.state.update((state) => ({ ...state, loading: true, error: null }));
 
     return this.http
       .put<BackendRecipe>(this.apiUrl + recipe.id + '/', {
@@ -125,16 +129,17 @@ export class RecipeItemService {
           this.handleImageForExistingRecipe(recipe.id, file, recipe.imageUrl, backendRecipe),
         ),
         map((backendRecipe) => Recipe.fromBackend(backendRecipe)),
-        tap((recipe) => {
-          this._currentRecipe.set(recipe);
-          this._loading.set(false);
-          if (onSuccess) onSuccess();
+        tap((updatedRecipe) => {
+          this.state.update((state) => ({ ...state, recipe: updatedRecipe }));
+          this.operationNotifier.next({ type: 'update', payload: updatedRecipe });
         }),
         catchError((error) => {
-          this._error.set(error.message);
-          this._loading.set(false);
+          this.state.update((state) => ({ ...state, error }));
           if (onError) onError(error);
           return throwError(() => error);
+        }),
+        finalize(() => {
+          this.state.update((state) => ({ ...state, loading: false }));
         }),
       );
   }
@@ -144,20 +149,21 @@ export class RecipeItemService {
     onSuccess?: () => void,
     onError?: (error: any) => void,
   ): Observable<void> {
-    this._loading.set(true);
-    this._error.set(null);
+    this.state.update((state) => ({ ...state, loading: true, error: null }));
 
     return this.http.delete<void>(this.apiUrl + id + '/').pipe(
       tap(() => {
-        this._currentRecipe.set(null);
-        this._loading.set(false);
+        this.operationNotifier.next({ type: 'delete', payload: this.state().recipe! });
+        this.state.update((state) => ({ ...state, loading: false }));
         if (onSuccess) onSuccess();
       }),
       catchError((error) => {
-        this._error.set(error.message);
-        this._loading.set(false);
+        this.state.update((state) => ({ ...state, error }));
         if (onError) onError(error);
         return throwError(() => error);
+      }),
+      finalize(() => {
+        this.state.update((state) => ({ ...state, loading: false }));
       }),
     );
   }
@@ -175,7 +181,7 @@ export class RecipeItemService {
   }
 
   private handleImageForNewRecipe(
-    response: CreateRecipeResponse,
+    response: CreateBucketExtendedResponse<Recipe>,
     file?: File | null,
   ): Observable<BackendRecipe> {
     if (file && response.presigned_upload_url && response.image_upload_key) {
@@ -225,7 +231,7 @@ export class RecipeItemService {
       .put(presignedUrl, file, {
         headers: new HttpHeaders({}),
         responseType: 'text',
-        context: BucketHttpContext,
+        context: RecipeBucketHttpContext,
       })
       .pipe(
         map(() => void 0),
@@ -240,4 +246,14 @@ export class RecipeItemService {
       image_bucket_key: imageBucketKey,
     });
   }
+
+  clearCurrentRecipe() {
+    this.state.set({ recipe: null, loading: false, error: null });
+  }
+
+  readonly isOwner = computed(() => {
+    const recipe = this.state().recipe;
+    const username = this.user.username();
+    return recipe && username && recipe.owner === username;
+  });
 }

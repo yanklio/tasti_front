@@ -32,7 +32,7 @@ export class RecipeItem {
   private subscription: Subscription | null = null;
 
   // Using signals from the service directly
-  readonly recipe = this.recipeService.currentRecipe;
+  readonly recipe = this.recipeService.recipe;
   readonly loading = this.recipeService.loading;
   readonly error = this.recipeService.error;
 
