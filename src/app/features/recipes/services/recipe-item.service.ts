@@ -17,6 +17,8 @@ import {
 } from 'rxjs';
 import { CrudRecipesOperation, RecipeBucketHttpContext } from './utils';
 import { UserService } from '../../../core/services/user.service';
+import { RecipesStorageService } from './recipes-storage.service';
+import { take } from 'rxjs/operators';
 
 interface PresignedUrlResponse {
   presigned_url: string;
@@ -47,6 +49,7 @@ interface RecipeState {
 export class RecipeItemService {
   private http = inject(HttpClient);
   private user = inject(UserService);
+  private recipesStorageService = inject(RecipesStorageService);
   private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE + '/';
 
   private readonly operationNotifier = new Subject<CrudRecipesOperation>();
@@ -63,6 +66,18 @@ export class RecipeItemService {
   loading = computed(() => this.state().loading);
   error = computed(() => this.state().error);
 
+  constructor() {
+    // Load cached current recipe on init
+    this.recipesStorageService
+      .loadRecipes()
+      .pipe(take(1))
+      .subscribe((cachedRecipe) => {
+        if (cachedRecipe.length > 0) {
+          this.state.update((state) => ({ ...state, recipe: cachedRecipe[0] }));
+        }
+      });
+  }
+
   loadRecipeById(id: number): Observable<Recipe> {
     this.state.update((state) => ({ ...state, loading: true }));
 
@@ -70,6 +85,8 @@ export class RecipeItemService {
       map((backendRecipe) => Recipe.fromBackend(backendRecipe)),
       tap((recipe) => {
         this.state.update((state) => ({ ...state, recipe }));
+        // Save to cache
+        this.recipesStorageService.saveRecipes([recipe]);
       }),
       catchError((error) => {
         this.state.update((state) => ({ ...state, error }));
@@ -99,6 +116,8 @@ export class RecipeItemService {
       map((backendRecipe) => Recipe.fromBackend(backendRecipe)),
       tap((newRecipe) => {
         this.state.update((state) => ({ ...state, recipe: newRecipe }));
+        // Save to cache
+        this.recipesStorageService.saveRecipes([newRecipe]);
         this.operationNotifier.next({ type: 'create', payload: newRecipe });
       }),
       catchError((error) => {
@@ -131,6 +150,8 @@ export class RecipeItemService {
         map((backendRecipe) => Recipe.fromBackend(backendRecipe)),
         tap((updatedRecipe) => {
           this.state.update((state) => ({ ...state, recipe: updatedRecipe }));
+          // Save to cache
+          this.recipesStorageService.saveRecipes([updatedRecipe]);
           this.operationNotifier.next({ type: 'update', payload: updatedRecipe });
         }),
         catchError((error) => {
@@ -249,6 +270,8 @@ export class RecipeItemService {
 
   clearCurrentRecipe() {
     this.state.set({ recipe: null, loading: false, error: null });
+    // Clear cache
+    this.recipesStorageService.saveRecipes([]);
   }
 
   readonly isOwner = computed(() => {

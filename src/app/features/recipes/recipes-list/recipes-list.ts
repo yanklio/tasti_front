@@ -40,6 +40,10 @@ export class RecipesList {
     this.route.queryParams.subscribe((params) => {
       const current_page = +params['current_page'] || 1;
       const page_size = +params['page_size'] || 10;
+      // Prefer cache for page 1 if available
+      if (current_page === 1 && this.recipes().length > 0) {
+        return;
+      }
       this.recipeListService.getRecipes({ page: current_page, pageSize: page_size }).subscribe();
     });
   }
