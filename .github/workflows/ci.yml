@@ -40,7 +40,7 @@ jobs:
       - name: Get S3 Bucket Name from SSM
         id: get_bucket_name
         run: |
-          BUCKET=$(aws ssm get-parameter --name "/my-app/frontend/angular-bucket-name" --query "Parameter.Value" --output text)
+          BUCKET=$(aws ssm get-parameter --name "/my-app/frontend/bucket-name" --query "Parameter.Value" --output text)
           echo "BUCKET_NAME=$BUCKET" >> $GITHUB_OUTPUT
 
       - name: Create production environment file
