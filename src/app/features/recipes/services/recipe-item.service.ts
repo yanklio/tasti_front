@@ -11,7 +11,6 @@ import {
   map,
   switchMap,
   of,
-  from,
   Subject,
   finalize,
 } from 'rxjs';
@@ -218,18 +217,19 @@ export class RecipeItemService {
 
   private handleImageForExistingRecipe(
     recipeId: number,
-    file?: File | null,
+    newFile?: File | null | undefined,
     currentImageUrl?: string,
     backendRecipe?: BackendRecipe,
   ): Observable<BackendRecipe> {
-    if (file) {
-      return this.generatePresignedUrl('PUT', undefined, file.name).pipe(
+    console.log({ recipeId, file: newFile, currentImageUrl, backendRecipe });
+    if (newFile) {
+      return this.generatePresignedUrl('PUT', undefined, newFile.name).pipe(
         switchMap((presigned) =>
-          this.uploadAndUpdateImage(presigned.presigned_url, file, recipeId, presigned.key),
+          this.uploadAndUpdateImage(presigned.presigned_url, newFile, recipeId, presigned.key),
         ),
         switchMap(() => this.http.get<BackendRecipe>(this.apiUrl + recipeId + '/')),
       );
-    } else if (file === null && currentImageUrl) {
+    } else if (newFile === null) {
       return this.updateRecipeImage(recipeId, '').pipe(
         switchMap(() => this.http.get<BackendRecipe>(this.apiUrl + recipeId + '/')),
       );
