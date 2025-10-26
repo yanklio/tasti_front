@@ -10,7 +10,6 @@ import { MatDialogModule } from '@angular/material/dialog';
   selector: 'app-root',
   imports: [RouterOutlet, MatToolbarModule, MatDialogModule],
   templateUrl: './app.html',
-  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('tasti_front');
@@ -23,7 +22,7 @@ export class App {
   constructor() {
     this.favicon.setFaviconByTheme(
       'assets/favicons/favicon-light.ico',
-      'assets/favicons/favicon-dark.ico'
+      'assets/favicons/favicon-dark.ico',
     );
   }
 }

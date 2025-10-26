@@ -12,14 +12,14 @@ const AuthHttpContext = new HttpContext().set(SKIP_AUTH, true);
   providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
   private readonly authUrl = environment.apiUrl + AUTH_API_ENDPOINTS.BASE;
 
-  private _accessToken = signal<string | null>(null);
+  private readonly _accessToken = signal<string | null>(null);
   readonly isAuthenticated = computed(() => this._accessToken() !== null);
 
-  private refreshInProgress = new BehaviorSubject<boolean>(false);
+  private readonly refreshInProgress = new BehaviorSubject<boolean>(false);
   public readonly refreshInProgress$ = this.refreshInProgress.asObservable();
 
   constructor() {

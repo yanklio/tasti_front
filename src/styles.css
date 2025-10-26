@@ -19,16 +19,6 @@ body {
   background: transparent;
 }
 
-/* For Firefox */
-html {
-  scrollbar-width: none;
-}
-
-/* For Internet Explorer and Edge legacy */
-body {
-  -ms-overflow-style: none;
-}
-
 /* Utility classes for selective scrollbar hiding */
 .hide-scrollbar {
   /* Webkit browsers */

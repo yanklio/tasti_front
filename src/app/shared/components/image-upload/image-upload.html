@@ -9,7 +9,7 @@
     (drop)="onDrop($event)"
   >
     @if (imageSrc) {
-    <img [src]="imageSrc" alt="Recipe image" class="uploaded-image" />
+    <img [src]="imageSrc" alt="Recipe" class="uploaded-image" />
     } @else {
     <div class="placeholder" (click)="triggerFileInput()">
       <mat-icon>cloud_upload</mat-icon>

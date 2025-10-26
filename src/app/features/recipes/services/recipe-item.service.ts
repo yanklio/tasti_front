@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { RECIPES_API_ENDPOINTS } from '../constants';
 import { BackendRecipe, Recipe } from '../recipe.model';
-import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   Observable,
   catchError,
@@ -48,9 +48,9 @@ interface RecipeState {
   providedIn: 'root',
 })
 export class RecipeItemService {
-  private http = inject(HttpClient);
-  private user = inject(UserService);
-  private recipesStorageService = inject(RecipesStorageService);
+  private readonly http = inject(HttpClient);
+  private readonly user = inject(UserService);
+  private readonly recipesStorageService = inject(RecipesStorageService);
   private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE + '/';
 
   private readonly operationNotifier = new Subject<CrudRecipesOperation>();

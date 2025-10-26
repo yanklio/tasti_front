@@ -8,8 +8,8 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class SessionService {
-  private authService = inject(AuthService);
-  private userService = inject(UserService);
+  private readonly authService = inject(AuthService);
+  private readonly userService = inject(UserService);
 
   public readonly isAuthenticated = computed(() => this.authService.isAuthenticated());
   public readonly user = computed(() => this.userService.user());

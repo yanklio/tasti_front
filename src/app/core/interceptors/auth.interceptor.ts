@@ -80,7 +80,6 @@ function handle401Error(
         return next(addTokenToRequest(request, response.access));
       }),
       catchError((error) => {
-        // router.navigate(['/login']);
         return throwError(() => error);
       }),
       finalize(() => {
@@ -92,7 +91,7 @@ function handle401Error(
       filter((token) => token !== null),
       take(1),
       switchMap((token) => {
-        return next(addTokenToRequest(request, token!));
+        return next(addTokenToRequest(request, token));
       }),
     );
   }

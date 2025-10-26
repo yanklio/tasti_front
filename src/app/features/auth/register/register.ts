@@ -9,7 +9,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { LogoComponent } from '../../../shared/components/logo/logo';
 import { BadgeComponent } from '../../../shared/components/badge/badge';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../../core/services/auth.service';
 import { RegisterRequest } from '../../../core/models/auth.model';
 import { SessionService } from '../../../core/services/session.service';
 import { AUTH_API_ENDPOINTS } from '../../../core/constants';
@@ -31,17 +30,17 @@ import { AUTH_API_ENDPOINTS } from '../../../core/constants';
   styleUrl: './register.css',
 })
 export class Register {
-  private router = inject(Router);
-  private _snackBar = inject(MatSnackBar);
+  private readonly router = inject(Router);
+  private readonly _snackBar = inject(MatSnackBar);
 
-  private sessionService = inject(SessionService);
+  private readonly sessionService = inject(SessionService);
 
-  loginLink = '/' + AUTH_API_ENDPOINTS.BASE + AUTH_API_ENDPOINTS.LOGIN;
+  readonly loginLink = '/' + AUTH_API_ENDPOINTS.BASE + AUTH_API_ENDPOINTS.LOGIN;
 
   registerForm: FormGroup;
   hidePassword = true;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private readonly fb: FormBuilder) {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(8)]],

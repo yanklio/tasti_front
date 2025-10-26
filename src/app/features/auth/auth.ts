@@ -6,6 +6,5 @@ import { AuthLayout } from '../../shared/layout/auth-layout/auth-layout';
   selector: 'app-auth',
   imports: [RouterOutlet, AuthLayout],
   templateUrl: './auth.html',
-  styleUrl: './auth.css',
 })
 export class Auth {}

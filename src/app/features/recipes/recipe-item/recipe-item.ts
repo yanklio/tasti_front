@@ -7,7 +7,6 @@ import { RecipeItemService } from '../services/recipe-item.service';
 import { LoaderComponent } from '../../../shared/components/loader/loader';
 import { BackHeader } from '../../../shared/components/back-header/back-header';
 import { UsernamePipe } from '../../../core/pipes/username-pipe';
-import { Subscription } from 'rxjs';
 import { RECIPES_ROUTES } from '../constants';
 
 @Component({
@@ -26,10 +25,9 @@ import { RECIPES_ROUTES } from '../constants';
   styleUrl: './recipe-item.css',
 })
 export class RecipeItem {
-  private recipeService = inject(RecipeItemService);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private subscription: Subscription | null = null;
+  private readonly recipeService = inject(RecipeItemService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
   // Using signals from the service directly
   readonly recipe = this.recipeService.recipe;
@@ -40,9 +38,7 @@ export class RecipeItem {
 
   constructor() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (!isNaN(id)) {
-      this.subscription = this.recipeService.loadRecipeById(id).subscribe();
-    }
+    this.recipeService.loadRecipeById(id).subscribe();
   }
 
   onBack(): void {
