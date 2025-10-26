@@ -47,7 +47,7 @@ export class ManageRecipe {
   readonly mode = signal<ManageRecipeMode>('create');
   readonly recipeForm: FormGroup;
   readonly imageSrc = signal<string | null>(null);
-  readonly selectedFile = signal<File | null>(null);
+  readonly selectedFile = signal<File | null | undefined>(undefined);
 
   readonly recipe = this.recipeItemService.recipe;
   readonly loading = this.recipeItemService.loading;

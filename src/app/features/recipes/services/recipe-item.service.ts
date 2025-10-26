@@ -2,7 +2,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { RECIPES_API_ENDPOINTS } from '../constants';
 import { BackendRecipe, Recipe } from '../recipe.model';
-import { HttpClient, HttpContext, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
   Observable,
   catchError,
@@ -11,7 +11,6 @@ import {
   map,
   switchMap,
   of,
-  from,
   Subject,
   finalize,
 } from 'rxjs';
@@ -49,9 +48,9 @@ interface RecipeState {
   providedIn: 'root',
 })
 export class RecipeItemService {
-  private http = inject(HttpClient);
-  private user = inject(UserService);
-  private recipesStorageService = inject(RecipesStorageService);
+  private readonly http = inject(HttpClient);
+  private readonly user = inject(UserService);
+  private readonly recipesStorageService = inject(RecipesStorageService);
   private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE + '/';
 
   private readonly operationNotifier = new Subject<CrudRecipesOperation>();
@@ -218,18 +217,19 @@ export class RecipeItemService {
 
   private handleImageForExistingRecipe(
     recipeId: number,
-    file?: File | null,
+    newFile?: File | null | undefined,
     currentImageUrl?: string,
     backendRecipe?: BackendRecipe,
   ): Observable<BackendRecipe> {
-    if (file) {
-      return this.generatePresignedUrl('PUT', undefined, file.name).pipe(
+    console.log({ recipeId, file: newFile, currentImageUrl, backendRecipe });
+    if (newFile) {
+      return this.generatePresignedUrl('PUT', undefined, newFile.name).pipe(
         switchMap((presigned) =>
-          this.uploadAndUpdateImage(presigned.presigned_url, file, recipeId, presigned.key),
+          this.uploadAndUpdateImage(presigned.presigned_url, newFile, recipeId, presigned.key),
         ),
         switchMap(() => this.http.get<BackendRecipe>(this.apiUrl + recipeId + '/')),
       );
-    } else if (file === null && currentImageUrl) {
+    } else if (newFile === null) {
       return this.updateRecipeImage(recipeId, '').pipe(
         switchMap(() => this.http.get<BackendRecipe>(this.apiUrl + recipeId + '/')),
       );

@@ -1,14 +1,12 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { BackendRecipeBrief, RecipeBrief } from '../recipe.model';
 import { environment } from '../../../../environments/environment';
-import { RECIPES_API_ENDPOINTS, RECIPES_ROUTES } from '../constants';
+import { RECIPES_API_ENDPOINTS } from '../constants';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, finalize, Observable, tap, throwError, map, Subject } from 'rxjs';
 import { PaginatedResponse, PaginationState } from '../../../core/models/pagination';
 import { RecipesStorageService } from './recipes-storage.service';
 import { RecipeItemService } from './recipe-item.service';
-import { CrudRecipesOperation } from './utils';
-import { take } from 'rxjs/operators';
 
 interface RecipeBriefState {
   recipes: RecipeBrief[];
@@ -23,20 +21,19 @@ interface PaginationParams {
 
 @Injectable()
 export default class RecipeListService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
-  private recipeItemService = inject(RecipeItemService);
-  private recipesStorageService = inject(RecipesStorageService);
+  private readonly recipeItemService = inject(RecipeItemService);
 
   private readonly apiUrl = environment.apiUrl + RECIPES_API_ENDPOINTS.BASE + '/';
 
-  private recipesState = signal<RecipeBriefState>({
+  private readonly recipesState = signal<RecipeBriefState>({
     recipes: [],
     loading: false,
     error: null,
   });
 
-  private paginationState = signal<PaginationState>({
+  private readonly paginationState = signal<PaginationState>({
     currentPage: 1,
     pageSize: 10,
     totalPages: 0,

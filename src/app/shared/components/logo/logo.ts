@@ -35,9 +35,8 @@ export class LogoComponent {
     return isDarkMode ? '/assets/brand/logo-dark.svg' : '/assets/brand/logo.svg';
   });
 
-  private themeService = inject(ThemeService);
-
-  constructor(private router: Router) {}
+  private readonly themeService = inject(ThemeService);
+  private readonly router = inject(Router);
 
   handleClick(): void {
     if (this.clickable()) {

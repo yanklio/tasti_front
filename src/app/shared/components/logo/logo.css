@@ -5,6 +5,8 @@
     filter 0.2s ease;
   user-select: none;
   object-fit: contain;
+  max-width: 100%;
+  height: auto;
 }
 
 .logo:hover {
@@ -57,10 +59,4 @@ body.system .logo[style*='cursor: pointer']:hover {
   outline: 2px solid var(--mat-sys-primary);
   outline-offset: 2px;
   border-radius: 4px;
-}
-
-/* Fallback styling */
-.logo {
-  max-width: 100%;
-  height: auto;
 }

@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../models/user.model';
 import { OwnedObject } from '../types/owner';
@@ -7,10 +6,8 @@ import { OwnedObject } from '../types/owner';
   providedIn: 'root',
 })
 export class UserService {
-  private httpClient = inject(HttpClient);
-
-  private _user = signal<User | null>(null);
-  private _loading = signal<boolean>(false);
+  private readonly _user = signal<User | null>(null);
+  private readonly _loading = signal<boolean>(false);
 
   private readonly cacheKey = 'user_data';
 

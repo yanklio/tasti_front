@@ -10,13 +10,13 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { CredentialsInterceptor } from './core/interceptors/credentials.interceptor';
 import { DebugInterceptor } from './core/interceptors/debug.interceptor';
 
+const Interceptors = [AuthInterceptor, CredentialsInterceptor, DebugInterceptor];
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes, withViewTransitions()),
-    provideHttpClient(
-      withInterceptors([AuthInterceptor, CredentialsInterceptor, DebugInterceptor]),
-    ),
+    provideHttpClient(withInterceptors(Interceptors)),
   ],
 };
