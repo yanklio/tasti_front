@@ -6,7 +6,14 @@
     <div class="image-placeholder">{{ recipe().title }}</div>
     }
     <mat-card-header>
-      <mat-card-title>{{ recipe().title }}</mat-card-title>
+      <mat-card-title>
+        <div class="title-item">
+          <span>{{recipe().title }}</span>
+        </div>
+        <div class="title-item" aria-hidden="true">
+          <span>{{recipe().title }}</span>
+        </div>
+      </mat-card-title>
       <mat-card-subtitle>{{ recipe().owner | username }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
