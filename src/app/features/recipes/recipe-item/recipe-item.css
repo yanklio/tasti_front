@@ -17,6 +17,11 @@
   margin-top: 16px;
   border-radius: 12px;
   overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.recipe-card:hover {
+  box-shadow: var(--mat-card-elevated-state-layer-shadow);
 }
 
 .recipe-title {
