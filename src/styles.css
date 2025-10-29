@@ -67,3 +67,16 @@ button.fab-fixed-bottom-right {
 .card-enter-animation {
   animation: card-enter 1s;
 }
+
+@keyframes paginator-enter {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.paginator-enter-animation {
+  animation: paginator-enter 0.8s;
+}

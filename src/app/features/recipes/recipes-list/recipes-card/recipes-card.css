@@ -45,6 +45,8 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  height: 40px;
 }
 
 .recipe-content {
