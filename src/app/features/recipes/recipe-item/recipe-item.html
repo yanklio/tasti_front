@@ -23,7 +23,7 @@
   } @if (error()) {
   <div class="error-message">{{ error() }}</div>
   } @if (recipe()) {
-  <mat-card appearance="outlined" class="recipe-card">
+  <mat-card appearance="outlined" class="recipe-card" animate.enter="card-enter-animation">
     @if (recipe()?.imageUrl) {
     <img mat-card-image [src]="recipe()?.imageUrl" [alt]="recipe()?.title" />
     } @else {

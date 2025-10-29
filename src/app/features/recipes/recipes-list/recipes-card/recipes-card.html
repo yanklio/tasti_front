@@ -1,4 +1,9 @@
-<mat-card class="recipe-card" appearance="outlined" (click)="onViewDetails()">
+<mat-card
+  class="recipe-card"
+  appearance="outlined"
+  animate.enter="card-enter-animation"
+  (click)="onViewDetails()"
+>
   <div class="recipe-content">
     @if (recipe().imageUrl) {
     <img mat-card-image [src]="recipe().imageUrl" [alt]="recipe().title" />
@@ -6,7 +11,9 @@
     <div class="image-placeholder">{{ recipe().title }}</div>
     }
     <mat-card-header>
-      <mat-card-title>{{ recipe().title }}</mat-card-title>
+      <mat-card-title>
+        <span>{{recipe().title }}</span>
+      </mat-card-title>
       <mat-card-subtitle>{{ recipe().owner | username }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
