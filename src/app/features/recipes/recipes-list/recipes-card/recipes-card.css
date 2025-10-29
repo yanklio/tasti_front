@@ -9,8 +9,8 @@
 }
 
 .recipe-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--mat-card-elevated-state-layer-shadow);
+  box-shadow: var(--mat-sys-level2);
+  transform: translateY(-1px);
 }
 
 .recipe-card img {
@@ -46,8 +46,28 @@
   overflow: hidden;
   text-overflow: ellipsis;
 
-  height: var(--mat-body-line-height, 36px);
+  height: 40px;
 }
+
+.recipe-content {
+  overflow: hidden;
+}
+
+/* card title*/
+
+.mat-mdc-card-title span {
+  font-weight: 500;
+  color: var(--mat-sys-on-primary-container);
+
+  display: -webkit-box;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* card actions*/
 
 mat-card-actions {
   display: flex;
@@ -63,3 +83,4 @@ mat-card-actions {
 .view-button mat-icon {
   margin-right: var(--mat-card-action-icon-margin, 4px);
 }
+

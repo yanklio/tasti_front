@@ -1,5 +1,6 @@
 .main-layout {
   height: 100vh;
+  background: var(--mat-sys-surface-container-low);
 }
 
 mat-drawer {
@@ -9,7 +10,6 @@ mat-drawer {
 }
 
 mat-drawer-content {
-  background: var(--mat-sys-surface-container-low);
   height: 100%;
 }
 
@@ -17,4 +17,17 @@ mat-drawer-content {
   height: 100%;
   padding: 24px;
   box-sizing: border-box;
+}
+
+@keyframes sidebar-enter {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.sidebar-enter-animation {
+  animation: sidebar-enter 0.8s;
 }

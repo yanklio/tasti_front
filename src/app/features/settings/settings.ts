@@ -8,7 +8,7 @@ import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-settings',
-  imports: [BackHeader, MainLayout, MatButtonToggleModule, MatCard, MatIcon],
+  imports: [BackHeader, MatButtonToggleModule, MatCard, MatIcon],
   templateUrl: './settings.html',
   styleUrl: './settings.css',
 })

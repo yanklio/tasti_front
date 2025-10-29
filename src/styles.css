@@ -50,3 +50,33 @@ button.fab-fixed-bottom-right {
   right: 24px;
   z-index: 1000;
 }
+
+/* Global animations */
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-enter-animation {
+  animation: card-enter 1s;
+}
+
+@keyframes paginator-enter {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.paginator-enter-animation {
+  animation: paginator-enter 0.8s;
+}
