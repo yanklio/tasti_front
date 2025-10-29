@@ -64,21 +64,6 @@ button.fab-fixed-bottom-right {
   }
 }
 
-@keyframes card-leave {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-}
-
 .card-enter-animation {
   animation: card-enter 1s;
-}
-
-.card-leave-animation {
-  animation: card-leave 1s;
 }
