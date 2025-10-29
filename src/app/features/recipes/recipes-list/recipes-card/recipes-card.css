@@ -81,3 +81,18 @@ mat-card-actions {
 .view-button mat-icon {
   margin-right: var(--mat-card-action-icon-margin, 4px);
 }
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.enter-animation {
+  animation: enter 1s;
+}

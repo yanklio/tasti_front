@@ -1,4 +1,10 @@
-<mat-card class="recipe-card" appearance="outlined" (click)="onViewDetails()">
+<mat-card
+  class="recipe-card"
+  appearance="outlined"
+  animate.enter="card-enter-animation"
+  animate.leave="card-leave-animation"
+  (click)="onViewDetails()"
+>
   <div class="recipe-content">
     @if (recipe().imageUrl) {
     <img mat-card-image [src]="recipe().imageUrl" [alt]="recipe().title" />
