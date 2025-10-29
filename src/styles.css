@@ -51,7 +51,7 @@ button.fab-fixed-bottom-right {
   z-index: 1000;
 }
 
-/* Global animations*/
+/* Global animations */
 
 @keyframes card-enter {
   from {
