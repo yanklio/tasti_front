@@ -18,16 +18,3 @@ mat-drawer-content {
   padding: 0 24px 0 24px;
   box-sizing: border-box;
 }
-
-@keyframes sidebar-enter {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-.sidebar-enter-animation {
-  animation: sidebar-enter 0.8s;
-}
