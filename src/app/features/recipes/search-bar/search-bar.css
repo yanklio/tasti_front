@@ -2,6 +2,7 @@
   --mat-sys-corner-extra-small: var(--mat-sys-corner-small);
   display: block;
   max-width: 600px;
+  transition: all 0.2s linear;
   width: 100%;
 }
 

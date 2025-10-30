@@ -1,6 +1,7 @@
 import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RECIPES_ROUTES } from '../constants';
 import RecipeListService from '../services/recipe-list.service';
@@ -20,6 +21,7 @@ import { SearchBar } from '../search-bar/search-bar';
     RecipesCard,
     MatButtonModule,
     MatIconModule,
+    MatDividerModule,
     LoaderComponent,
     MatPaginatorModule,
     EmptyState,
