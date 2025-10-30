@@ -82,4 +82,6 @@ img {
   bottom: 16px;
   right: 16px;
   z-index: 1000;
+
+  box-shadow: var(--mat-sys-level5);
 }

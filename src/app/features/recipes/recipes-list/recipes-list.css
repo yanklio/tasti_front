@@ -31,8 +31,10 @@ app-empty-state {
 
 /* Custom Card-like Paginator Styling */
 .card-paginator {
-  position: fixed;
-  right: 200px;
+  /*position: fixed;*/
+  position: absolute;
+
+  right: 170px;
   border: 1px solid var(--mat-sys-outline-variant);
   border-bottom: 0px;
   box-shadow: var(--mat-card-container-elevation-shadow);

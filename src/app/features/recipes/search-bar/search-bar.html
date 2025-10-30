@@ -1,0 +1,16 @@
+<mat-form-field appearance="outline" class="search-field">
+  <input
+    matInput
+    type="text"
+    [value]="searchTerm()"
+    (input)="onInput($event)"
+    placeholder="Enter search term"
+  />
+  @if (searchTerm()) {
+  <button matIconButton matSuffix (click)="onIconClick()" type="button">
+    <mat-icon>close</mat-icon>
+  </button>
+  } @else {
+  <mat-icon matSuffix>search</mat-icon>
+  }
+</mat-form-field>
