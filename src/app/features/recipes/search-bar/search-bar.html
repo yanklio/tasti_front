@@ -1,10 +1,9 @@
 <mat-form-field appearance="outline" class="search-field">
-  <input matInput type="text" [formControl]="searchTerm" placeholder="Enter search term" />
-  @if (searchTermSignal()) {
+  <input matInput type="text" [formControl]="searchTerm" placeholder="Search" />
+  @if (searchTerm.value) {
   <button matIconButton matSuffix (click)="onIconClick()" type="button">
     <mat-icon>close</mat-icon>
   </button>
-  } @else {
-  <mat-icon matSuffix>search</mat-icon>
   }
+  <mat-icon matPrefix>search</mat-icon>
 </mat-form-field>
