@@ -57,7 +57,8 @@ button.fab-fixed-bottom-right {
 
 @keyframes card-enter {
   from {
-    transform: translateY(-10px);
+    opacity: 0;
+    /*transform: translateY(-10px);*/
   }
   to {
     opacity: 1;

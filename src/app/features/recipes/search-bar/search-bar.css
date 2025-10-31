@@ -1,3 +1,10 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
 .search-field {
   --mat-sys-corner-extra-small: var(--mat-sys-corner-small);
   display: block;
@@ -6,9 +13,13 @@
   width: 100%;
 }
 
-:host {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
+.search-field.mat-focused {
+  max-width: 620px;
+}
+
+.search-field
+  ::ng-deep
+  .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--outlined.mdc-text-field--no-label {
+  background: var(--mat-sys-background);
+  border-radius: var(--mat-sys-corner-small);
 }
