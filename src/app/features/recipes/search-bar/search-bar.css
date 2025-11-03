@@ -13,10 +13,6 @@
   width: 100%;
 }
 
-.search-field.mat-focused {
-  max-width: 620px;
-}
-
 .search-field
   ::ng-deep
   .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--outlined.mdc-text-field--no-label {
