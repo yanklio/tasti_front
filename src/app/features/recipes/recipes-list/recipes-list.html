@@ -17,7 +17,7 @@
     } }
   </div>
 
-  @if (!loading() && !error() && recipes() && pagination().totalItems > pagination().pageSize) {
+  @if (!loading() && !error() && recipes()) {
   <mat-paginator
     class="card-paginator"
     [length]="pagination().totalItems"
