@@ -67,13 +67,31 @@
   text-overflow: ellipsis;
 }
 
+/* recipe meta */
+
+.recipe-meta {
+  background-color: var(--mat-sys-on-primary-container);
+  padding: 8px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: var(--mat-sys-on-primary);
+  margin-top: 10px;
+}
+
+.recipe-meta .duration,
+.recipe-meta .difficulty {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 /* card actions*/
 
 mat-card-actions {
   display: flex;
   justify-content: space-between;
   padding: 8px 8px;
-  border-top: 1px solid var(--mat-sys-inverse-primary);
 }
 
 .view-button {

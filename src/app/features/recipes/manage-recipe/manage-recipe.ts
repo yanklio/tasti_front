@@ -175,8 +175,10 @@ export class ManageRecipe {
       0,
       recipeData.title || '',
       recipeData.description || '',
-      'to-set-on-the-backend',
       '',
+      recipeData.difficulty || 'easy',
+      recipeData.duration || '',
+      'to-set-on-the-backend',
     );
 
     this.recipeItemService.addRecipe(newRecipe, this.selectedFile()).subscribe({
@@ -194,8 +196,9 @@ export class ManageRecipe {
       recipeData.title || currentRecipe.title,
       recipeData.description || currentRecipe.description,
       currentRecipe.owner,
-      currentRecipe.imageUrl,
-      currentRecipe.ingredients,
+      recipeData.difficulty || currentRecipe.difficulty,
+      recipeData.duration || currentRecipe.duration,
+      recipeData.imageUrl || currentRecipe.imageUrl,
     );
 
     this.recipeItemService.editRecipe(updatedRecipe, this.selectedFile()).subscribe({
