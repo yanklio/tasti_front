@@ -9,9 +9,11 @@ import { Router } from '@angular/router';
 import { RecipeBrief } from '../../recipe.model';
 import { RECIPES_ROUTES } from '../../constants';
 import { GLOBAL_ROUTES } from '../../../../constants';
-import { UsernamePipe } from '../../../../core/pipes/username-pipe';
 import { UserService } from '../../../../core/services/user.service';
 import { RecipeItemService } from '../../services/recipe-item.service';
+import { UsernamePipe } from '../../../../core/pipes/username/username-pipe';
+import { RecipeDifficultyPipe } from '../../../../core/pipes/recipe-difficulty/recipe-difficulty-pipe';
+import { DurationPipe } from '../../../../core/pipes/duration/duration-pipe';
 
 @Component({
   selector: 'app-recipes-card',
@@ -23,6 +25,8 @@ import { RecipeItemService } from '../../services/recipe-item.service';
     MatMenuModule,
     MatSnackBarModule,
     UsernamePipe,
+    RecipeDifficultyPipe,
+    DurationPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './recipes-card.html',
