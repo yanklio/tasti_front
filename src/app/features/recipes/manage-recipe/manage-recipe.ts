@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal, viewChild, ElementRef } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormBuilder,
@@ -66,6 +66,12 @@ export class ManageRecipe {
   readonly loading = this.recipeItemService.loading;
   readonly error = this.recipeItemService.error;
 
+  private durationDigits: string[] = ['0', '0', '0', '0'];
+  private shouldResetOnNextInput = false;
+  readonly durationHint = signal<string>('');
+
+  private readonly durationInput = viewChild<ElementRef<HTMLInputElement>>('durationInput');
+
   constructor() {
     this.recipeForm = this.createForm();
     this.setupComponent();
@@ -108,6 +114,77 @@ export class ManageRecipe {
       this.imageSrc.set(null);
     }
     this.recipeForm.patchValue({ imageUrl: this.imageSrc() || '' });
+  }
+
+  onDurationKeyDown(event: KeyboardEvent): void {
+    event.preventDefault();
+
+    const key = event.key;
+
+    // Handle backspace
+    if (key === 'Backspace' || key === 'Delete') {
+      this.durationDigits = ['0', '0', '0', '0'];
+      this.shouldResetOnNextInput = false;
+      this.updateDurationDisplay();
+      return;
+    }
+
+    // Handle number input
+    if (/^[0-9]$/.test(key)) {
+      // Clear on first input after focus
+      if (this.shouldResetOnNextInput) {
+        this.durationDigits = ['0', '0', '0', '0'];
+        this.shouldResetOnNextInput = false;
+      }
+
+      // Shift all digits left and add new digit at the end
+      this.durationDigits.shift();
+      this.durationDigits.push(key);
+      this.updateDurationDisplay();
+    }
+  }
+
+  onDurationFocus(): void {
+    // Mark to reset on next input
+    this.shouldResetOnNextInput = true;
+
+    // Show current value as hint
+    const currentValue = this.recipeForm.get('duration')?.value || '00:00';
+    this.durationHint.set(currentValue);
+
+    // Clear the input to show placeholder
+    this.recipeForm.patchValue({ duration: '' }, { emitEvent: false });
+
+    // Move cursor to end
+    setTimeout(() => {
+      const input = this.durationInput()?.nativeElement;
+      if (input) {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
+    });
+  }
+
+  onDurationBlur(): void {
+    // Clear hint and restore value
+    this.durationHint.set('');
+    if (!this.recipeForm.get('duration')?.value) {
+      this.updateDurationDisplay();
+    }
+  }
+
+  private updateDurationDisplay(): void {
+    const minutes = this.durationDigits[0] + this.durationDigits[1];
+    const seconds = this.durationDigits[2] + this.durationDigits[3];
+    const formatted = `${minutes}:${seconds}`;
+    this.recipeForm.patchValue({ duration: formatted }, { emitEvent: false });
+
+    // Move cursor to end after update
+    setTimeout(() => {
+      const input = this.durationInput()?.nativeElement;
+      if (input) {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
+    });
   }
 
   private createForm(): FormGroup {
@@ -178,6 +255,15 @@ export class ManageRecipe {
       imageUrl: recipe.imageUrl,
     });
     this.imageSrc.set(recipe.imageUrl || null);
+
+    // Update duration digits from existing recipe
+    const [minutes, seconds] = duration.split(':');
+    this.durationDigits = [
+      minutes[0] || '0',
+      minutes[1] || '0',
+      seconds[0] || '0',
+      seconds[1] || '0',
+    ];
   }
 
   private prepareRecipeData(): Partial<Recipe> {

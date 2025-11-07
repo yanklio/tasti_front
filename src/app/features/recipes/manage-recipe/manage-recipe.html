@@ -36,9 +36,18 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Duration</mat-label>
-        <input matInput formControlName="duration" />
-        <span matSuffix>:00</span>
+        <mat-label>Duration (HH:MM)</mat-label>
+        <input
+          matInput
+          formControlName="duration"
+          (keydown)="onDurationKeyDown($event)"
+          (focus)="onDurationFocus()"
+          (blur)="onDurationBlur()"
+          [placeholder]="durationHint()"
+          readonly
+          style="cursor: text; caret-color: auto"
+          #durationInput
+        />
       </mat-form-field>
     </mat-expansion-panel>
 
