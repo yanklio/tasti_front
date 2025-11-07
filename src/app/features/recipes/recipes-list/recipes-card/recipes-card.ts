@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, inject, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
@@ -17,6 +18,7 @@ import { RecipeItemService } from '../../services/recipe-item.service';
   imports: [
     MatCardModule,
     MatButtonModule,
+    MatChipsModule,
     MatIconModule,
     MatMenuModule,
     MatSnackBarModule,
