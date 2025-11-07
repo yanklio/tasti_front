@@ -23,35 +23,40 @@
   } @if (error()) {
   <div class="error-message">{{ error() }}</div>
   } @if (recipe()) {
-  <mat-card appearance="outlined" class="recipe-card" animate.enter="card-enter-animation">
+
+  <!-- Image Section -->
+  <div class="recipe-image-container">
     @if (recipe()?.imageUrl) {
-    <img mat-card-image [src]="recipe()?.imageUrl" [alt]="recipe()?.title" />
+    <img [src]="recipe()?.imageUrl" [alt]="recipe()?.title" class="recipe-image" />
     } @else {
     <div class="image-placeholder">{{ recipe()?.title }}</div>
     }
+  </div>
 
-    <mat-card-header>
-      <mat-card-title>{{ recipe()?.title }}</mat-card-title>
-      <mat-card-subtitle>{{ recipe()!.owner | username }}</mat-card-subtitle>
-    </mat-card-header>
+  <!-- Dynamic Blocks Container -->
+  <div class="blocks-container">
+    <!-- Block 1: Basic Info -->
+    <mat-card appearance="outlined" class="recipe-block">
+      <mat-card-header>
+        <mat-card-title>{{ recipe()?.title }}</mat-card-title>
+        <mat-card-subtitle>{{ recipe()!.owner | username }}</mat-card-subtitle>
+      </mat-card-header>
 
-    <mat-chip-set class="card-meta">
-      <mat-chip>{{ recipe()!.difficulty | recipeDifficulty }}</mat-chip>
-      <mat-chip>{{ recipe()!.duration | duration }}</mat-chip>
-    </mat-chip-set>
+      <mat-card-content>
+        <p class="recipe-description">{{ recipe()?.description }}</p>
+      </mat-card-content>
+    </mat-card>
 
-    <mat-card-content>
-      <p class="recipe-description">{{ recipe()?.description }}</p>
-
-      @if (recipe()?.ingredients?.length) {
-      <h3>Ingredients:</h3>
-      <ul class="ingredients-list">
-        @for (ingredient of recipe()?.ingredients; track ingredient) {
-        <li>{{ ingredient }}</li>
-        }
-      </ul>
-      }
-    </mat-card-content>
-  </mat-card>
+    <!-- Block 2: Tags/Meta -->
+    <mat-card appearance="outlined" class="recipe-block">
+      <mat-card-content>
+        <h3 class="block-title">Tags</h3>
+        <mat-chip-set class="recipe-chips">
+          <mat-chip>{{ recipe()!.difficulty | recipeDifficulty }}</mat-chip>
+          <mat-chip>{{ recipe()!.duration | duration }}</mat-chip>
+        </mat-chip-set>
+      </mat-card-content>
+    </mat-card>
+  </div>
   } }
 </div>
