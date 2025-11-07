@@ -3,11 +3,14 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
 import { RecipeItemService } from '../services/recipe-item.service';
 import { LoaderComponent } from '../../../shared/components/loader/loader';
 import { BackHeader } from '../../../shared/components/back-header/back-header';
 import { RECIPES_ROUTES } from '../constants';
 import { UsernamePipe } from '../../../core/pipes/username/username-pipe';
+import { RecipeDifficultyPipe } from '../../../core/pipes/recipe-difficulty/recipe-difficulty-pipe';
+import { DurationPipe } from '../../../core/pipes/duration/duration-pipe';
 
 @Component({
   selector: 'app-recipe-item',
@@ -16,10 +19,13 @@ import { UsernamePipe } from '../../../core/pipes/username/username-pipe';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
+    MatChipsModule,
     RouterModule,
     LoaderComponent,
     BackHeader,
     UsernamePipe,
+    RecipeDifficultyPipe,
+    DurationPipe,
   ],
   templateUrl: './recipe-item.html',
   styleUrl: './recipe-item.css',

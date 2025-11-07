@@ -30,10 +30,17 @@
     <div class="image-placeholder">{{ recipe()?.title }}</div>
     }
 
-    <mat-card-content>
-      <h2 class="recipe-title">{{ recipe()?.title }}</h2>
-      <p class="recipe-owner">Created by: {{ recipe()!.owner | username }}</p>
+    <mat-card-header>
+      <mat-card-title>{{ recipe()?.title }}</mat-card-title>
+      <mat-card-subtitle>{{ recipe()!.owner | username }}</mat-card-subtitle>
+    </mat-card-header>
 
+    <mat-chip-set class="card-meta">
+      <mat-chip>{{ recipe()!.difficulty | recipeDifficulty }}</mat-chip>
+      <mat-chip>{{ recipe()!.duration | duration }}</mat-chip>
+    </mat-chip-set>
+
+    <mat-card-content>
       <p class="recipe-description">{{ recipe()?.description }}</p>
 
       @if (recipe()?.ingredients?.length) {

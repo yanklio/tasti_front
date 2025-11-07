@@ -15,65 +15,75 @@
 
 .recipe-card {
   margin-top: 16px;
-  border-radius: 12px;
+  border-radius: var(--mat-sys-corner-large);
   overflow: hidden;
   transition: box-shadow 0.2s;
+  box-shadow: var(--mat-sys-level1);
 }
 
-.recipe-card:hover {
-  box-shadow: var(--mat-card-elevated-state-layer-shadow);
-}
-
-.recipe-title {
-  font-size: 24px;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.recipe-owner {
-  color: var(--mat-secondary-text-color);
-  margin-bottom: 16px;
-  font-size: 14px;
-}
-
-.recipe-description {
-  margin-bottom: 24px;
-  line-height: 1.6;
-}
-
-mat-card-content {
-  padding: 16px;
-}
-
-.ingredients-list {
-  padding-left: 20px;
-  margin-bottom: 16px;
-}
-
-.ingredients-list li {
-  margin-bottom: 8px;
-}
-
-img {
+.recipe-card img {
   width: 100%;
-  height: 500px;
+  height: 400px;
   min-height: 300px;
   object-fit: cover;
   object-position: center;
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--mat-sys-corner-large) var(--mat-sys-corner-large) 0 0;
   display: block;
 }
 
 .image-placeholder {
-  height: 300px;
+  height: 400px;
   width: 100%;
   background-color: var(--mat-sys-surface-variant);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px 12px 0 0;
-  font-size: 18px;
+  border-radius: var(--mat-sys-corner-large) var(--mat-sys-corner-large) 0 0;
+  font-size: 24px;
   color: var(--mat-sys-on-surface-variant);
+  font-weight: 500;
+}
+
+/* Card header */
+.recipe-card mat-card-header {
+  padding: 16px 16px 8px 16px;
+}
+
+.recipe-card mat-card-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--mat-sys-on-primary-container);
+  margin-bottom: 4px;
+}
+
+.recipe-card mat-card-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.recipe-description {
+  margin-bottom: 32px;
+  line-height: 1.8;
+  font-size: 16px;
+  color: var(--mat-sys-on-surface);
+}
+
+mat-card-content h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--mat-sys-on-surface);
+}
+
+/* Recipe meta chips */
+.card-meta {
+  padding: 8px 16px 0px 16px;
+  gap: 8px;
+}
+
+.card-meta mat-chip {
   font-weight: 500;
 }
 
@@ -82,6 +92,5 @@ img {
   bottom: 16px;
   right: 16px;
   z-index: 1000;
-
   box-shadow: var(--mat-sys-level5);
 }
