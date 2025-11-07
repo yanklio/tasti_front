@@ -1,11 +1,21 @@
 import { Component, effect, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from '../recipe.model';
@@ -23,10 +33,13 @@ type ManageRecipeMode = 'create' | 'edit';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
     MatExpansionModule,
+    MatDividerModule,
     MatSnackBarModule,
     ImageUpload,
     LoaderComponent,
@@ -101,6 +114,8 @@ export class ManageRecipe {
     return this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
+      difficulty: ['easy', Validators.required],
+      duration: ['00:00', [Validators.required]],
       imageUrl: [''],
     });
   }
@@ -154,9 +169,12 @@ export class ManageRecipe {
   }
 
   private updateFormWithRecipe(recipe: Recipe): void {
+    const duration = recipe.duration.split(':').slice(0, 2).join(':');
     this.recipeForm.patchValue({
       title: recipe.title,
       description: recipe.description,
+      difficulty: recipe.difficulty,
+      duration,
       imageUrl: recipe.imageUrl,
     });
     this.imageSrc.set(recipe.imageUrl || null);
@@ -167,6 +185,8 @@ export class ManageRecipe {
     return {
       title: formValue.title,
       description: formValue.description,
+      difficulty: formValue.difficulty,
+      duration: formValue.duration + ':00',
     };
   }
 
@@ -220,11 +240,6 @@ export class ManageRecipe {
 
   private handleServiceError(error: string): void {
     this.snackBar.open('Recipe not found: ' + error, 'Close', { duration: 3000 });
-    this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
-  }
-
-  private handleInvalidId(): void {
-    this.snackBar.open('Invalid recipe ID', 'Close', { duration: 3000 });
     this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
   }
 }

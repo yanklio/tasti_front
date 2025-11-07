@@ -1,8 +1,7 @@
 .manage-recipe-form {
-  padding: 16px 4px 120px 4px;
+  padding: 16px 4px 100px 4px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .recipe-info-panel {
@@ -12,4 +11,8 @@
 .recipe-info-panel .mat-mdc-form-field {
   display: block;
   margin-bottom: 16px;
+}
+
+mat-divider.manage-recipe-divider {
+  padding-bottom: 32px;
 }
