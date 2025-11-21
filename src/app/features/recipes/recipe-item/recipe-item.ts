@@ -11,6 +11,7 @@ import { RECIPES_ROUTES } from '../constants';
 import { UsernamePipe } from '../../../core/pipes/username/username-pipe';
 import { RecipeDifficultyPipe } from '../../../core/pipes/recipe-difficulty/recipe-difficulty-pipe';
 import { DurationPipe } from '../../../core/pipes/duration/duration-pipe';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-recipe-item',
@@ -26,6 +27,7 @@ import { DurationPipe } from '../../../core/pipes/duration/duration-pipe';
     UsernamePipe,
     RecipeDifficultyPipe,
     DurationPipe,
+    MatTabsModule,
   ],
   templateUrl: './recipe-item.html',
   styleUrl: './recipe-item.css',

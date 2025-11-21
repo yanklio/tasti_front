@@ -33,30 +33,55 @@
     }
   </div>
 
-  <!-- Dynamic Blocks Container -->
-  <div class="blocks-container">
-    <!-- Block 1: Basic Info -->
-    <mat-card appearance="outlined" class="recipe-block">
-      <mat-card-header>
-        <mat-card-title>{{ recipe()?.title }}</mat-card-title>
-        <mat-card-subtitle>{{ recipe()!.owner | username }}</mat-card-subtitle>
-      </mat-card-header>
+  <!-- Two-column layout -->
+  <div class="content-wrapper">
+    <!-- Left Sidebar (30%) - Basic Info and Tags -->
+    <aside class="recipe-sidebar">
+      <!-- Basic Info Card -->
+      <mat-card appearance="outlined" class="recipe-block">
+        <mat-card-header>
+          <mat-card-title>{{ recipe()?.title }}</mat-card-title>
+          <mat-card-subtitle>{{ recipe()!.owner | username }}</mat-card-subtitle>
+        </mat-card-header>
 
-      <mat-card-content>
-        <p class="recipe-description">{{ recipe()?.description }}</p>
-      </mat-card-content>
-    </mat-card>
+        <mat-card-content>
+          <p class="recipe-description">{{ recipe()?.description }}</p>
+        </mat-card-content>
+      </mat-card>
 
-    <!-- Block 2: Tags/Meta -->
-    <mat-card appearance="outlined" class="recipe-block">
-      <mat-card-content>
-        <h3 class="block-title">Tags</h3>
-        <mat-chip-set class="recipe-chips">
-          <mat-chip>{{ recipe()!.difficulty | recipeDifficulty }}</mat-chip>
-          <mat-chip>{{ recipe()!.duration | duration }}</mat-chip>
-        </mat-chip-set>
-      </mat-card-content>
-    </mat-card>
+      <!-- Tags Card -->
+      <mat-card appearance="outlined" class="recipe-block">
+        <mat-card-content>
+          <h3 class="block-title">Tags</h3>
+          <mat-chip-set class="recipe-chips">
+            <mat-chip>{{ recipe()!.difficulty | recipeDifficulty }}</mat-chip>
+            <mat-chip>{{ recipe()!.duration | duration }}</mat-chip>
+          </mat-chip-set>
+        </mat-card-content>
+      </mat-card>
+    </aside>
+
+    <!-- Right Main Area (70%) - Cook Steps -->
+    <main class="recipe-main">
+      <mat-card appearance="outlined" class="recipe-block">
+        <mat-card-content>
+          <mat-tab-group>
+            <mat-tab label="Cooking Steps">
+              @if (recipe() && recipe()!.steps) {
+              <div class="steps-container">
+                @for(step of recipe()!.steps || []; track recipe()!.id + $index) {
+                <div class="step-item">
+                  <div class="step-index">{{ $index + 1 }}</div>
+                  <p class="recipe-step">{{ step }}</p>
+                </div>
+                }
+              </div>
+              }
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </main>
   </div>
   } }
 </div>

@@ -62,10 +62,12 @@ class RecipeBrief {
 
 interface BackendRecipe extends BackendRecipeBrief {
   ingredients?: string[];
+  steps: string[];
 }
 
 class Recipe extends RecipeBrief {
   ingredients: string[];
+  steps: string[];
 
   constructor(
     id: number,
@@ -76,9 +78,11 @@ class Recipe extends RecipeBrief {
     duration: string,
     imageUrl?: string,
     ingredients?: string[],
+    steps?: string[],
   ) {
     super(id, title, description, owner, difficulty, duration, imageUrl);
     this.ingredients = ingredients || [];
+    this.steps = steps || [];
   }
 
   static override fromBackend(backendRecipe: BackendRecipe): Recipe {
@@ -91,6 +95,7 @@ class Recipe extends RecipeBrief {
       backendRecipe.duration,
       backendRecipe.image_download_url,
       backendRecipe.ingredients,
+      backendRecipe.steps,
     );
   }
 
@@ -103,6 +108,7 @@ class Recipe extends RecipeBrief {
       difficulty: this.difficulty,
       duration: this.duration,
       ingredients: this.ingredients,
+      steps: this.steps,
     };
   }
 }
