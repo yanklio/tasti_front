@@ -1,15 +1,29 @@
 :host {
-  height: 100%;
+  height: 100vh;
   display: block;
   box-sizing: border-box;
   position: relative;
 }
 
+.recipes-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  /*gap: 12px;*/
+}
+
+app-search-bar {
+  margin-top: 12px;
+}
+
 .list-wrapper {
-  /*height: 100%;*/
+  margin-top: 12px;
+
+  flex: 1;
   display: block;
   box-sizing: border-box;
-  padding-bottom: 80px;
 }
 
 .recipes-grid {
@@ -24,15 +38,10 @@ app-empty-state {
   align-items: center;
   width: 100%;
   height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
-/* Custom Card-like Paginator Styling */
 .card-paginator {
-  position: fixed;
-  right: 200px;
+  align-self: end;
   border: 1px solid var(--mat-sys-outline-variant);
   border-bottom: 0px;
   box-shadow: var(--mat-card-container-elevation-shadow);
@@ -42,13 +51,23 @@ app-empty-state {
     box-shadow var(--mat-expansion-panel-container-animation-duration, 0.2s);
 
   padding: 8px 16px;
-  margin-left: 120px;
-
-  z-index: 10;
 
   width: auto;
   max-width: 810px;
 
+  padding-bottom: 6px;
   border-radius: 12px 12px 0 0;
-  bottom: 0;
+
+  margin-top: 24px;
+  margin-right: 200px;
+}
+
+mat-divider {
+  border-top-color: var(--mat-sys-on-primary-container);
+  border-top-width: 4px;
+  border-radius: var(--mat-sys-corner-extra-large);
+  max-width: 300px;
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 12px;
 }

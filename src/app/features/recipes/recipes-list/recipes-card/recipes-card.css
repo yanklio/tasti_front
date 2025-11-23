@@ -20,7 +20,7 @@
   object-fit: cover;
   object-position: center;
 
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--mat-sys-corner-medium) var(--mat-sys-corner-medium) 0 0;
 
   display: block;
 }
@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--mat-sys-corner-medium) var(--mat-sys-corner-medium) 0 0;
   font-size: 18px;
   color: var(--mat-sys-on-surface-variant);
   font-weight: 500;
@@ -51,6 +51,12 @@
 
 .recipe-content {
   overflow: hidden;
+}
+
+/* recipe meta */
+
+.card-meta {
+  padding: 8px 16px 0px 16px;
 }
 
 /* card title*/
@@ -73,7 +79,6 @@ mat-card-actions {
   display: flex;
   justify-content: space-between;
   padding: 8px 8px;
-  border-top: 1px solid var(--mat-sys-inverse-primary);
 }
 
 .view-button {
@@ -83,4 +88,3 @@ mat-card-actions {
 .view-button mat-icon {
   margin-right: var(--mat-card-action-icon-margin, 4px);
 }
-

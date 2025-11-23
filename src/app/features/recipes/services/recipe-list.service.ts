@@ -87,12 +87,19 @@ export default class RecipeListService {
     });
   }
 
-  getRecipes(pagination: PaginationParams): Observable<PaginatedResponse<RecipeBrief>> {
+  getRecipes(
+    pagination: PaginationParams,
+    searchTerm?: string,
+  ): Observable<PaginatedResponse<RecipeBrief>> {
     this.recipesState.update((state) => ({ ...state, loading: true, error: null }));
 
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('page', pagination.page.toString())
       .set('page_size', pagination.pageSize.toString());
+
+    if (searchTerm) {
+      params = params.set('search_term', searchTerm);
+    }
 
     return this.http.get<PaginatedResponse<BackendRecipeBrief>>(this.apiUrl, { params }).pipe(
       map(

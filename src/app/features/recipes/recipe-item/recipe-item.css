@@ -13,73 +13,285 @@
   text-align: center;
 }
 
-.recipe-card {
-  margin-top: 16px;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: box-shadow 0.2s;
-}
-
-.recipe-card:hover {
-  box-shadow: var(--mat-card-elevated-state-layer-shadow);
-}
-
-.recipe-title {
-  font-size: 24px;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.recipe-owner {
-  color: var(--mat-secondary-text-color);
-  margin-bottom: 16px;
-  font-size: 14px;
-}
-
-.recipe-description {
-  margin-bottom: 24px;
-  line-height: 1.6;
-}
-
-mat-card-content {
-  padding: 16px;
-}
-
-.ingredients-list {
-  padding-left: 20px;
-  margin-bottom: 16px;
-}
-
-.ingredients-list li {
-  margin-bottom: 8px;
-}
-
-img {
+/* Image Section - 50% of screen height, 100% width */
+.recipe-image-container {
   width: 100%;
-  height: 500px;
-  min-height: 300px;
+  height: 50vh;
+  position: relative;
+  margin-top: 20px;
+}
+
+.recipe-image {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center;
-  border-radius: 12px 12px 0 0;
   display: block;
+  border-radius: var(--mat-sys-corner-medium);
 }
 
 .image-placeholder {
-  height: 300px;
+  height: 100%;
   width: 100%;
   background-color: var(--mat-sys-surface-variant);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px 12px 0 0;
-  font-size: 18px;
+  font-size: 24px;
   color: var(--mat-sys-on-surface-variant);
+  font-weight: 500;
+  border-radius: var(--mat-sys-corner-medium);
+}
+
+/* Two Column Layout Container */
+.content-wrapper {
+  display: flex;
+  gap: 20px;
+  margin-top: -40px;
+  padding: 0 20px 20px 20px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Left Sidebar - 30% width */
+.recipe-sidebar {
+  flex: 0 0 30%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Right Main Content - 70% width */
+.recipe-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Recipe Block - Base styles for all cards */
+.recipe-block {
+  border-radius: var(--mat-sys-corner-medium);
+  overflow: hidden;
+  box-shadow: var(--mat-sys-level3);
+  position: relative;
+  height: fit-content;
+}
+
+/* Block header */
+.recipe-block mat-card-header {
+  padding: 16px 16px 8px 16px;
+}
+
+.recipe-block mat-card-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--mat-sys-on-primary-container);
+  margin-bottom: 4px;
+}
+
+.recipe-block mat-card-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+/* Block content */
+.recipe-block mat-card-content {
+  min-height: fit-content;
+}
+
+.block-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0 0 12px 0;
+  color: var(--mat-sys-on-surface);
+}
+
+.recipe-description {
+  margin-bottom: 0;
+  line-height: 1.8;
+  font-size: 16px;
+  color: var(--mat-sys-on-surface);
+}
+
+/* Steps container */
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0px 16px;
+  padding-top: 24px;
+}
+
+/* Individual step item */
+.step-item {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+/* Step index badge */
+.step-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font-weight: 600;
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Recipe step styling */
+.recipe-step {
+  margin: 0;
+  line-height: 1.6;
+  font-size: 1rem;
+  color: var(--mat-sys-on-surface);
+  flex: 1;
+  font-weight: 400;
+}
+
+/* Chips section inside block */
+.recipe-chips {
+  gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.recipe-chips mat-chip {
   font-weight: 500;
 }
 
+/* FAB button */
 .fab-fixed-bottom-right {
   position: fixed;
   bottom: 16px;
   right: 16px;
   z-index: 1000;
+  box-shadow: var(--mat-sys-level5);
+}
+
+/* Tab label styling */
+::ng-deep .mdc-tab__text-label {
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
+}
+
+/* Remove top padding from mat-card-content inside tab group */
+.recipe-main mat-card-content {
+  padding-top: 8px;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+
+  .recipe-sidebar {
+    flex: 0 1 auto;
+  }
+
+  .recipe-main {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .recipe-image-container {
+    height: 40vh;
+  }
+
+  .content-wrapper {
+    gap: 16px;
+    padding: 0 16px 16px 16px;
+    margin-top: -30px;
+  }
+
+  .recipe-block mat-card-title {
+    font-size: 20px;
+  }
+
+  .block-title {
+    font-size: 16px;
+  }
+
+  .recipe-description {
+    font-size: 14px;
+  }
+
+  .recipe-step {
+    font-size: 14px;
+  }
+
+  .step-index {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    font-size: 14px;
+  }
+
+  .step-item {
+    gap: 12px;
+  }
+
+  .recipe-step {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recipe-image-container {
+    height: 30vh;
+  }
+
+  .content-wrapper {
+    gap: 12px;
+    padding: 0 12px 12px 12px;
+    margin-top: -20px;
+  }
+
+  .recipe-block mat-card-title {
+    font-size: 18px;
+  }
+
+  .block-title {
+    font-size: 14px;
+  }
+
+  .recipe-description {
+    font-size: 13px;
+  }
+
+  .recipe-step {
+    font-size: 13px;
+  }
+
+  .step-index {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .step-item {
+    gap: 10px;
+  }
+
+  .recipe-step {
+    font-size: 12px;
+  }
+
+  .fab-fixed-bottom-right {
+    bottom: 12px;
+    right: 12px;
+  }
 }

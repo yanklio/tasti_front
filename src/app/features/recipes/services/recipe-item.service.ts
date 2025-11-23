@@ -29,6 +29,8 @@ interface PresignedUrlResponse {
 interface CreateRecipeRequest {
   title: string;
   description: string;
+  difficulty: string;
+  duration: string;
   request_presigned_url?: boolean;
   filename?: string;
 }
@@ -105,6 +107,8 @@ export class RecipeItemService {
     const request: CreateRecipeRequest = {
       title: recipe.title,
       description: recipe.description,
+      difficulty: recipe.difficulty,
+      duration: recipe.duration,
     };
 
     if (file) {
@@ -143,6 +147,8 @@ export class RecipeItemService {
       .put<BackendRecipe>(this.apiUrl + recipe.id + '/', {
         title: recipe.title,
         description: recipe.description,
+        difficulty: recipe.difficulty,
+        duration: recipe.duration,
       })
       .pipe(
         switchMap((backendRecipe) =>
