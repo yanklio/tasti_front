@@ -9,9 +9,9 @@
     <app-image-upload [imageSrc]="imageSrc()" (imageFileChange)="onImageFileChange($event)">
     </app-image-upload>
 
-    <mat-expansion-panel expanded="true" class="recipe-info-panel">
+    <mat-expansion-panel class="recipe-info-panel">
       <mat-expansion-panel-header>
-        <mat-panel-title>Recipe Basic Information</mat-panel-title>
+        <mat-panel-title>Basic Information</mat-panel-title>
       </mat-expansion-panel-header>
 
       <mat-form-field appearance="outline">
@@ -22,6 +22,32 @@
       <mat-form-field appearance="outline">
         <mat-label>Description</mat-label>
         <textarea matInput formControlName="description" required></textarea>
+      </mat-form-field>
+
+      <mat-divider class="manage-recipe-divider"></mat-divider>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Difficulty</mat-label>
+        <mat-select formControlName="difficulty" required>
+          <mat-option value="easy">Easy</mat-option>
+          <mat-option value="medium">Medium</mat-option>
+          <mat-option value="hard">Hard</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Duration (HH:MM)</mat-label>
+        <input
+          matInput
+          formControlName="duration"
+          (keydown)="onDurationKeyDown($event)"
+          (focus)="onDurationFocus()"
+          (blur)="onDurationBlur()"
+          [placeholder]="durationHint()"
+          readonly
+          style="cursor: text; caret-color: auto"
+          #durationInput
+        />
       </mat-form-field>
     </mat-expansion-panel>
 

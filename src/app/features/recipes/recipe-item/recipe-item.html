@@ -23,28 +23,65 @@
   } @if (error()) {
   <div class="error-message">{{ error() }}</div>
   } @if (recipe()) {
-  <mat-card appearance="outlined" class="recipe-card" animate.enter="card-enter-animation">
+
+  <!-- Image Section -->
+  <div class="recipe-image-container">
     @if (recipe()?.imageUrl) {
-    <img mat-card-image [src]="recipe()?.imageUrl" [alt]="recipe()?.title" />
+    <img [src]="recipe()?.imageUrl" [alt]="recipe()?.title" class="recipe-image" />
     } @else {
     <div class="image-placeholder">{{ recipe()?.title }}</div>
     }
+  </div>
 
-    <mat-card-content>
-      <h2 class="recipe-title">{{ recipe()?.title }}</h2>
-      <p class="recipe-owner">Created by: {{ recipe()!.owner | username }}</p>
+  <!-- Two-column layout -->
+  <div class="content-wrapper">
+    <!-- Left Sidebar (30%) - Basic Info and Tags -->
+    <aside class="recipe-sidebar">
+      <!-- Basic Info Card -->
+      <mat-card appearance="outlined" class="recipe-block">
+        <mat-card-header>
+          <mat-card-title>{{ recipe()?.title }}</mat-card-title>
+          <mat-card-subtitle>{{ recipe()!.owner | username }}</mat-card-subtitle>
+        </mat-card-header>
 
-      <p class="recipe-description">{{ recipe()?.description }}</p>
+        <mat-card-content>
+          <p class="recipe-description">{{ recipe()?.description }}</p>
+        </mat-card-content>
+      </mat-card>
 
-      @if (recipe()?.ingredients?.length) {
-      <h3>Ingredients:</h3>
-      <ul class="ingredients-list">
-        @for (ingredient of recipe()?.ingredients; track ingredient) {
-        <li>{{ ingredient }}</li>
-        }
-      </ul>
-      }
-    </mat-card-content>
-  </mat-card>
+      <!-- Tags Card -->
+      <mat-card appearance="outlined" class="recipe-block">
+        <mat-card-content>
+          <h3 class="block-title">Tags</h3>
+          <mat-chip-set class="recipe-chips">
+            <mat-chip>{{ recipe()!.difficulty | recipeDifficulty }}</mat-chip>
+            <mat-chip>{{ recipe()!.duration | duration }}</mat-chip>
+          </mat-chip-set>
+        </mat-card-content>
+      </mat-card>
+    </aside>
+
+    <!-- Right Main Area (70%) - Cook Steps -->
+    <main class="recipe-main">
+      <mat-card appearance="outlined" class="recipe-block">
+        <mat-card-content>
+          <mat-tab-group>
+            <mat-tab label="Cooking Steps">
+              @if (recipe() && recipe()!.steps) {
+              <div class="steps-container">
+                @for(step of recipe()!.steps || []; track recipe()!.id + $index) {
+                <div class="step-item">
+                  <div class="step-index">{{ $index + 1 }}</div>
+                  <p class="recipe-step">{{ step }}</p>
+                </div>
+                }
+              </div>
+              }
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </main>
+  </div>
   } }
 </div>

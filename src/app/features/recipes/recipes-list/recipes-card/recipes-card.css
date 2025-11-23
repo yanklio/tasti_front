@@ -53,6 +53,12 @@
   overflow: hidden;
 }
 
+/* recipe meta */
+
+.card-meta {
+  padding: 8px 16px 0px 16px;
+}
+
 /* card title*/
 
 .mat-mdc-card-title span {
@@ -73,7 +79,6 @@ mat-card-actions {
   display: flex;
   justify-content: space-between;
   padding: 8px 8px;
-  border-top: 1px solid var(--mat-sys-inverse-primary);
 }
 
 .view-button {

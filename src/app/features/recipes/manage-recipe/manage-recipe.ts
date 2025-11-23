@@ -1,11 +1,21 @@
-import { Component, effect, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, effect, inject, signal, viewChild, ElementRef } from '@angular/core';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from '../recipe.model';
@@ -23,10 +33,13 @@ type ManageRecipeMode = 'create' | 'edit';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
     MatExpansionModule,
+    MatDividerModule,
     MatSnackBarModule,
     ImageUpload,
     LoaderComponent,
@@ -52,6 +65,12 @@ export class ManageRecipe {
   readonly recipe = this.recipeItemService.recipe;
   readonly loading = this.recipeItemService.loading;
   readonly error = this.recipeItemService.error;
+
+  private durationDigits: string[] = ['0', '0', '0', '0'];
+  private shouldResetOnNextInput = false;
+  readonly durationHint = signal<string>('');
+
+  private readonly durationInput = viewChild<ElementRef<HTMLInputElement>>('durationInput');
 
   constructor() {
     this.recipeForm = this.createForm();
@@ -97,10 +116,83 @@ export class ManageRecipe {
     this.recipeForm.patchValue({ imageUrl: this.imageSrc() || '' });
   }
 
+  onDurationKeyDown(event: KeyboardEvent): void {
+    event.preventDefault();
+
+    const key = event.key;
+
+    // Handle backspace
+    if (key === 'Backspace' || key === 'Delete') {
+      this.durationDigits = ['0', '0', '0', '0'];
+      this.shouldResetOnNextInput = false;
+      this.updateDurationDisplay();
+      return;
+    }
+
+    // Handle number input
+    if (/^[0-9]$/.test(key)) {
+      // Clear on first input after focus
+      if (this.shouldResetOnNextInput) {
+        this.durationDigits = ['0', '0', '0', '0'];
+        this.shouldResetOnNextInput = false;
+      }
+
+      // Shift all digits left and add new digit at the end
+      this.durationDigits.shift();
+      this.durationDigits.push(key);
+      this.updateDurationDisplay();
+    }
+  }
+
+  onDurationFocus(): void {
+    // Mark to reset on next input
+    this.shouldResetOnNextInput = true;
+
+    // Show current value as hint
+    const currentValue = this.recipeForm.get('duration')?.value || '00:00';
+    this.durationHint.set(currentValue);
+
+    // Clear the input to show placeholder
+    this.recipeForm.patchValue({ duration: '' }, { emitEvent: false });
+
+    // Move cursor to end
+    setTimeout(() => {
+      const input = this.durationInput()?.nativeElement;
+      if (input) {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
+    });
+  }
+
+  onDurationBlur(): void {
+    // Clear hint and restore value
+    this.durationHint.set('');
+    if (!this.recipeForm.get('duration')?.value) {
+      this.updateDurationDisplay();
+    }
+  }
+
+  private updateDurationDisplay(): void {
+    const minutes = this.durationDigits[0] + this.durationDigits[1];
+    const seconds = this.durationDigits[2] + this.durationDigits[3];
+    const formatted = `${minutes}:${seconds}`;
+    this.recipeForm.patchValue({ duration: formatted }, { emitEvent: false });
+
+    // Move cursor to end after update
+    setTimeout(() => {
+      const input = this.durationInput()?.nativeElement;
+      if (input) {
+        input.setSelectionRange(input.value.length, input.value.length);
+      }
+    });
+  }
+
   private createForm(): FormGroup {
     return this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
+      difficulty: ['easy', Validators.required],
+      duration: ['00:00', [Validators.required]],
       imageUrl: [''],
     });
   }
@@ -154,12 +246,24 @@ export class ManageRecipe {
   }
 
   private updateFormWithRecipe(recipe: Recipe): void {
+    const duration = recipe.duration.split(':').slice(0, 2).join(':');
     this.recipeForm.patchValue({
       title: recipe.title,
       description: recipe.description,
+      difficulty: recipe.difficulty,
+      duration,
       imageUrl: recipe.imageUrl,
     });
     this.imageSrc.set(recipe.imageUrl || null);
+
+    // Update duration digits from existing recipe
+    const [minutes, seconds] = duration.split(':');
+    this.durationDigits = [
+      minutes[0] || '0',
+      minutes[1] || '0',
+      seconds[0] || '0',
+      seconds[1] || '0',
+    ];
   }
 
   private prepareRecipeData(): Partial<Recipe> {
@@ -167,6 +271,8 @@ export class ManageRecipe {
     return {
       title: formValue.title,
       description: formValue.description,
+      difficulty: formValue.difficulty,
+      duration: formValue.duration + ':00',
     };
   }
 
@@ -175,8 +281,10 @@ export class ManageRecipe {
       0,
       recipeData.title || '',
       recipeData.description || '',
-      'to-set-on-the-backend',
       '',
+      recipeData.difficulty || 'easy',
+      recipeData.duration || '',
+      'to-set-on-the-backend',
     );
 
     this.recipeItemService.addRecipe(newRecipe, this.selectedFile()).subscribe({
@@ -194,8 +302,9 @@ export class ManageRecipe {
       recipeData.title || currentRecipe.title,
       recipeData.description || currentRecipe.description,
       currentRecipe.owner,
-      currentRecipe.imageUrl,
-      currentRecipe.ingredients,
+      recipeData.difficulty || currentRecipe.difficulty,
+      recipeData.duration || currentRecipe.duration,
+      recipeData.imageUrl || currentRecipe.imageUrl,
     );
 
     this.recipeItemService.editRecipe(updatedRecipe, this.selectedFile()).subscribe({
@@ -217,11 +326,6 @@ export class ManageRecipe {
 
   private handleServiceError(error: string): void {
     this.snackBar.open('Recipe not found: ' + error, 'Close', { duration: 3000 });
-    this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
-  }
-
-  private handleInvalidId(): void {
-    this.snackBar.open('Invalid recipe ID', 'Close', { duration: 3000 });
     this.router.navigate([RECIPES_ROUTES.RECIPES_LIST]);
   }
 }

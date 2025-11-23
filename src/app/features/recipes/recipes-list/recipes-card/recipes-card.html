@@ -19,6 +19,10 @@
     <mat-card-content>
       <p>{{ recipe().description }}</p>
     </mat-card-content>
+    <mat-chip-set class="card-meta">
+      <mat-chip>{{ recipe().difficulty | recipeDifficulty }}</mat-chip>
+      <mat-chip>{{ recipe().duration | duration }}</mat-chip>
+    </mat-chip-set>
   </div>
   <mat-card-actions (click)="$event.stopPropagation()">
     <button mat-button class="view-button" (click)="onViewDetails()">
