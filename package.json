@@ -1,12 +1,36 @@
 {
   "name": "tasti-front",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A modern recipe management application built with Angular 20 and Material Design 3",
+  "keywords": [
+    "angular",
+    "recipe",
+    "cooking",
+    "material-design",
+    "pwa",
+    "food"
+  ],
+  "author": "Tasti Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yanklio/tasti_front.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yanklio/tasti_front/issues"
+  },
+  "homepage": "https://github.com/yanklio/tasti_front#readme",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:coverage": "ng test --code-coverage",
+    "lint": "ng lint",
+    "serve:prod": "ng serve --configuration production",
+    "analyze": "ng build --stats-json && npx webpack-bundle-analyzer dist/tasti-front/stats.json"
   },
   "prettier": {
     "printWidth": 100,
