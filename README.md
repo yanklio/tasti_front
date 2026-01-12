@@ -1,7 +1,6 @@
-# 🍽️ Tasti
+# Tasti
 
 A modern, intuitive recipe management application built with **Angular 20** and **Material Design 3**.
-
 Discover, organize, and share your favorite recipes with a beautiful, responsive interface that works seamlessly across all your devices.
 
 ## ✨ Features
@@ -139,13 +138,6 @@ Builds are optimized with:
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Built with [Angular](https://angular.dev) and [Angular Material](https://material.angular.io)
-- Icons by [Material Symbols](https://fonts.google.com/icons)
-- Inspired by modern recipe management needs
-
 ---
 
 Made with ♡ for food lovers everywhere
